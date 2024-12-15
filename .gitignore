@@ -1,0 +1,49 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+
+# Rider/JetBrains ignored files
+.idea/
+*.iml
+/modules.xml
+/contentModel.xml
+/projectSettingsUpdater.xml
+/httpRequests/
+/dataSources/
+/dataSources.local.xml
+
+# Build-Dateien (für .NET)
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Log-Dateien
+*.log
+
+# Cache-Dateien
+*.cache/
+
+# NuGet-spezifische Dateien
+*.nupkg
+*.snupkg
+packages/
+
+# Visual Studio spezifisch
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Temporäre Dateien
+*.tmp
+*.bak
+~$*
+
+# Angular spezifisch (falls verwendet)
+node_modules/
+dist/
+
