@@ -15,6 +15,6 @@ public class SilaPrinterAdapter : IPrinterController
     }
     public void Print(string content)
     {
-        throw new NotImplementedException();
+        _printingService.PrintLine(content);
     }
 }

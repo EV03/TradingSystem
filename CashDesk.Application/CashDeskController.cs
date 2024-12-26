@@ -28,11 +28,11 @@ public class CashDeskController : ICashDeskController
 
     public void Start()
     {
-        _cashBoxController.startCashbox();
+        _cashBoxController.StartListeningToCashbox();
         Console.WriteLine("CashDesk state machine started.");
     }
     
-    private void OnActionTriggered(object? sender, CashDeskAction button)
+    private void OnActionTriggered(object? sender, CashboxAction button)
     {
         Console.WriteLine($"Cashbox button pressed: {button}");
     }

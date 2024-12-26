@@ -9,14 +9,20 @@ public class SilaBarcodeScannerAdapter : IBarcodeScannerController
     
     private readonly IIntermediateObservableCommand<string>? _barcodeStream;
     
+    public event EventHandler<string>? BarcodeScanned;
+    
     
     public SilaBarcodeScannerAdapter(IBarcodeScannerService barcodeScannerService)
     {
         _barcodeScannerService = barcodeScannerService;
     }
-    
 
-    public Task<string>  ScanBarcode()
+    public void StartListeningToBarcodes()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void StopListeningToBarcodes()
     {
         throw new NotImplementedException();
     }

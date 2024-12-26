@@ -2,9 +2,9 @@
 
 public interface ICashBoxController
 {
-    event EventHandler<CashDeskAction> ActionTriggered;
+    event EventHandler<CashboxAction> ActionTriggered;
 
-     void startCashbox();
+     void StartListeningToCashbox();
      
 }
  

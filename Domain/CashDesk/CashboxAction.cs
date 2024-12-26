@@ -1,6 +1,6 @@
 ﻿namespace Domain.CashDesk;
 
-public enum CashDeskAction
+public enum CashboxAction
 {
     StartNewSale,
         

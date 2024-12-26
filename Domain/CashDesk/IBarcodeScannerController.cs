@@ -2,5 +2,10 @@
 
 public interface IBarcodeScannerController
 {
-    Task<string> ScanBarcode();  
+    event EventHandler<string> BarcodeScanned;
+    void StartListeningToBarcodes();
+
+    void StopListeningToBarcodes();
+
 }
+

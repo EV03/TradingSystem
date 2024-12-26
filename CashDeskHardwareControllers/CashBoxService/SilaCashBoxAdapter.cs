@@ -15,9 +15,9 @@ public class SilaCashBoxAdapter : ICashBoxController
         _transactionService = transactionService;
     }
 
-    public event EventHandler<CashDeskAction>? ActionTriggered;
+    public event EventHandler<CashboxAction>? ActionTriggered;
 
-    public void startCashbox()
+    public void StartListeningToCashbox()
     {
         if (_buttonStream != null)
         {
@@ -25,7 +25,6 @@ public class SilaCashBoxAdapter : ICashBoxController
         }
 
         _buttonStream = _cashboxService.ListenToCashdeskButtons();
-        Console.WriteLine("Started listening to cash box");
         
         Task.Run(async () =>
         {
@@ -35,7 +34,6 @@ public class SilaCashBoxAdapter : ICashBoxController
                 {
                     if (_buttonStream.IntermediateValues.TryRead(out var button))
                     {
-                        Console.WriteLine($"Cashbox button pressed: {button}");
                         ActionTriggered?.Invoke(this, MapSilaButtonToCashDeskAction(button)); 
                     }
                 }
@@ -51,27 +49,15 @@ public class SilaCashBoxAdapter : ICashBoxController
         });
     }
     
-    public void StopCashbox()
-    {
-        if (_buttonStream == null)
-        {
-            throw new InvalidOperationException("Not listening to cashbox buttons.");
-        }
-
-        _buttonStream.Cancel();
-        _buttonStream = null;
-        Console.WriteLine("Stopped listening to cash box");
-    }
-    
-    private CashDeskAction MapSilaButtonToCashDeskAction(CashboxButton silaButton)
+    private CashboxAction MapSilaButtonToCashDeskAction(CashboxButton silaButton)
     {
         return silaButton switch
         {
-            CashboxButton.StartNewSale => CashDeskAction.StartNewSale,
-            CashboxButton.FinishSale => CashDeskAction.FinishSale,
-            CashboxButton.PayWithCash => CashDeskAction.PayWithCash,
-            CashboxButton.PayWithCard => CashDeskAction.PayWithCard,
-            CashboxButton.DisableExpressMode => CashDeskAction.DisableExpressMode,
+            CashboxButton.StartNewSale => CashboxAction.StartNewSale,
+            CashboxButton.FinishSale => CashboxAction.FinishSale,
+            CashboxButton.PayWithCash => CashboxAction.PayWithCash,
+            CashboxButton.PayWithCard => CashboxAction.PayWithCard,
+            CashboxButton.DisableExpressMode => CashboxAction.DisableExpressMode,
             _ => throw new ArgumentOutOfRangeException(nameof(silaButton), silaButton, null)
         };
     }
