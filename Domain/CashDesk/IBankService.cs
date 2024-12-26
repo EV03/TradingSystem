@@ -2,7 +2,7 @@
 
 public interface IBankService
 {
-    Task<BankTransactionContext> CreateTransactionContextAsync(double amount);
+    Task<BankTransactionContext> CreateTransactionContextAsync(int amount);
     
     Task<AuthorizationResult> AuthorizePaymentAsync(BankTransactionContext context, string token);
     

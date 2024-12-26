@@ -11,7 +11,6 @@ public class SilaCardReaderAdapter : ICardReaderController
     {
         _cardReaderService = cardReaderService;
     }
-    
     public Task<CardAuthorization> WaitForCardReadAsync()
     {
         throw new NotImplementedException();
@@ -19,11 +18,11 @@ public class SilaCardReaderAdapter : ICardReaderController
 
     public void Confirm()
     {
-        throw new NotImplementedException();
+        _cardReaderService.Confirm();
     }
     
     public void Abort(string message)
     {
-        throw new NotImplementedException();
+        _cardReaderService.Abort(message);
     }
 }

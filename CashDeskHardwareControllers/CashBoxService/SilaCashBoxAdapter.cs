@@ -16,6 +16,7 @@ public class SilaCashBoxAdapter : ICashBoxController
     }
 
     public event EventHandler<CashboxAction>? ActionTriggered;
+    public event EventHandler<string>? ListeningFailed;
 
     public void StartListeningToCashbox()
     {
@@ -38,13 +39,10 @@ public class SilaCashBoxAdapter : ICashBoxController
                     }
                 }
             }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine("Cashbox button listening was canceled.");
-            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while listening to cashbox buttons: {ex.Message}");
+                ListeningFailed?.Invoke(this, ex.Message);
             }
         });
     }
