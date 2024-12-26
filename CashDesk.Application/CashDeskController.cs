@@ -11,17 +11,17 @@ public class CashDeskController : ICashDeskController
     private readonly IPrinterController _printerController;
     private readonly IDisplayController _displayController;
     private readonly ICardReaderController _cardReaderController;
-    private readonly ITransactionService _transactionService;
+    private readonly ISaleService _saleService;
     
     public CashDeskController(ICashBoxController cashBoxController, IBarcodeScannerController barcodeScannerController,
-        IPrinterController printerController, IDisplayController displayController, ICardReaderController cardReaderController, ITransactionService transactionService)
+        IPrinterController printerController, IDisplayController displayController, ICardReaderController cardReaderController, ISaleService saleService)
     {
         _cashBoxController = cashBoxController;
         _barcodeScannerController = barcodeScannerController;
         _printerController = printerController;
         _displayController = displayController;
         _cardReaderController = cardReaderController;
-        _transactionService = transactionService;
+        _saleService = saleService;
         
         _cashBoxController.ActionTriggered += OnActionTriggered;
     }

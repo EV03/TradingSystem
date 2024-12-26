@@ -2,5 +2,9 @@
 
 public interface ICardReaderController
 {
-    bool Pay();
+    Task<CardAuthorization> WaitForCardReadAsync();
+   void Confirm();
+
+   void Abort(string message);
+
 }

@@ -6,13 +6,13 @@ namespace CashDeskHardwareControllers.CashBoxService;
 public class SilaCashBoxAdapter : ICashBoxController
 {
     private readonly ICashboxService _cashboxService;
-    private readonly ITransactionService _transactionService;
+    private readonly ISaleService _saleService;
     private IIntermediateObservableCommand<CashboxButton>? _buttonStream;
     
-    public SilaCashBoxAdapter(ICashboxService cashboxService, ITransactionService transactionService)
+    public SilaCashBoxAdapter(ICashboxService cashboxService, ISaleService saleService)
     {
         _cashboxService = cashboxService;
-        _transactionService = transactionService;
+        _saleService = saleService;
     }
 
     public event EventHandler<CashboxAction>? ActionTriggered;

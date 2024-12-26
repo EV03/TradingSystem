@@ -2,5 +2,5 @@
 
 public interface IPrinterController
 {
-    public void Print(String content);
+    public void Print(String receipt);
 }
