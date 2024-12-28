@@ -25,7 +25,15 @@ public class SilaCashBoxAdapter : ICashBoxController
             throw new InvalidOperationException("Already listening to cashbox buttons.");
         }
 
-        _buttonStream = _cashboxService.ListenToCashdeskButtons();
+        try
+        {
+            _buttonStream = _cashboxService.ListenToCashdeskButtons();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error while listening to Cashbox: {ex.Message}");
+            ListeningFailed?.Invoke(this, ex.Message);
+        }
         
         Task.Run(async () =>
         {

@@ -11,12 +11,35 @@ public class SilaCardReaderAdapter : ICardReaderController
     {
         _cardReaderService = cardReaderService;
     }
-    public Task<CardAuthorization> WaitForCardReadAsync()
+    public async Task<OperationResult<CardAuthorization>> WaitForCardReadAsync(int amount, byte[] challenge)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var authorizationCommand = _cardReaderService.Authorize(amount, new MemoryStream(challenge));
+            
+            var authorizationData = await authorizationCommand.Response;
+
+            var cardAuthorization = new CardAuthorization(
+                authorizationData.Account,
+                authorizationData.AuthorizationToken,
+                (int)authorizationData.Amount
+            );
+
+            return OperationResult<CardAuthorization>.Success(cardAuthorization);
+        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("Card reading operation was canceled.");
+            return OperationResult<CardAuthorization>.Canceled();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error during card reading: " + ex.Message);
+            return OperationResult<CardAuthorization>.Failure(ex.Message);
+        }
     }
 
-    public void Confirm()
+    public void Confirm(string message)
     {
         _cardReaderService.Confirm();
     }

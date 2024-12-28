@@ -4,33 +4,54 @@ namespace CashDesk.Infrastructure.Bank;
 
 public class SilaBankServiceAdapter : IBankService
 {
-    
     IBankServer _bankServer;
-    TransactionContext _transactionContext;
     
     public SilaBankServiceAdapter(IBankServer bankServer) 
     {
         _bankServer = bankServer;
     }
-    public Task<BankTransactionContext> CreateTransactionContextAsync(int amount)
+    public async Task<OperationResult<BankTransactionContext>> CreateTransactionContextAsync(int amount)
     {
-       _transactionContext = _bankServer.CreateContext(amount);
-       DateTime timestamp = DateTime.Now;
-       BankTransactionContext bankTransactionContext = new BankTransactionContext(_transactionContext.ContextId, _transactionContext.Challenge.ToString(), _transactionContext.Amount, timestamp);
-       return Task.FromResult(bankTransactionContext);
-    } 
-
-    public Task<AuthorizationResult> AuthorizePaymentAsync(BankTransactionContext context, string token)
-    {
+        
         try
         {
-            _bankServer.AuthorizePayment(context.Id, context.Challenge, token);
-            return Task.FromResult(new AuthorizationResult(true, null));
+            var transactionContext = _bankServer.CreateContext(amount);
+
+            byte[] challengeBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                transactionContext.Challenge.CopyTo(memoryStream);
+                challengeBytes = memoryStream.ToArray();
+            }
+            
+            var bankTransactionContext = new BankTransactionContext(
+                transactionContext.ContextId,
+                challengeBytes,
+                transactionContext.Amount,
+                DateTime.UtcNow
+            );
+            return OperationResult<BankTransactionContext>.Success(bankTransactionContext);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Error: " + ex.Message);
-            return Task.FromResult(new AuthorizationResult(false, ex.Message));
+            return OperationResult<BankTransactionContext>.Failure(ex.Message);
+        }
+    } 
+    
+    public  Task<OperationResult<AuthorizationResult>> AuthorizePaymentAsync(string contextId, string account,  string token)
+    {
+        try
+        {
+            _bankServer.AuthorizePayment(contextId, account, token);
+            var authorizationResult = new AuthorizationResult(success: true, null);
+            return Task.FromResult(OperationResult<AuthorizationResult>.Success(authorizationResult));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            var authorizationResult = new AuthorizationResult(success: false, ex.Message);
+            return Task.FromResult(OperationResult<AuthorizationResult>.Failure(ex.Message));
         }
         
     }
