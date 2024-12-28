@@ -8,15 +8,11 @@ public class BankTransactionContext
     
     public double Amount { get; set; }
     
-    public DateTime Timestamp { get; set; }
-    
-    
-    public BankTransactionContext(string id, byte[] challenge, double amount, DateTime timestamp)
+    public BankTransactionContext(string id, byte[] challenge, double amount)
     {
         Id = id;
         Challenge = challenge;
         Amount = amount;
-        Timestamp = timestamp;
     }
     
 }

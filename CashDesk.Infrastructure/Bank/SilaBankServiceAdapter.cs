@@ -27,8 +27,7 @@ public class SilaBankServiceAdapter : IBankService
             var bankTransactionContext = new BankTransactionContext(
                 transactionContext.ContextId,
                 challengeBytes,
-                transactionContext.Amount,
-                DateTime.UtcNow
+                transactionContext.Amount
             );
             return OperationResult<BankTransactionContext>.Success(bankTransactionContext);
         }
