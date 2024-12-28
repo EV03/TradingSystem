@@ -1,17 +1,34 @@
-﻿namespace Domain.CashDesk;
-
-public class OperationResult<T>
+﻿public abstract class OperationResultBase
 {
     public bool IsSuccess { get; }
     public bool IsCanceled { get; }
     public string? ErrorMessage { get; }
-    public T? Result { get; }
 
-    private OperationResult(bool isSuccess, bool isCanceled, string? errorMessage, T? result)
+    protected OperationResultBase(bool isSuccess, bool isCanceled, string? errorMessage)
     {
         IsSuccess = isSuccess;
         IsCanceled = isCanceled;
         ErrorMessage = errorMessage;
+    }
+}
+
+public class OperationResult : OperationResultBase
+{
+    private OperationResult(bool isSuccess, bool isCanceled, string? errorMessage)
+        : base(isSuccess, isCanceled, errorMessage) { }
+
+    public static OperationResult Success() => new OperationResult(true, false, null);
+    public static OperationResult Canceled() => new OperationResult(false, true, null);
+    public static OperationResult Failure(string errorMessage) => new OperationResult(false, false, errorMessage);
+}
+
+public class OperationResult<T> : OperationResultBase
+{
+    public T? Result { get; }
+
+    private OperationResult(bool isSuccess, bool isCanceled, string? errorMessage, T? result)
+        : base(isSuccess, isCanceled, errorMessage)
+    {
         Result = result;
     }
 
