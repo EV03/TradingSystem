@@ -7,5 +7,5 @@ public interface IStoreCommunication
 {
     Task<ProductDto> GetProduct(string barcode);
     
-    Task FinishSale (TransactionDto transaction);
+    Task UpdateInventory (TransactionDto transaction);
 }

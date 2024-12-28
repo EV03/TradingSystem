@@ -2,8 +2,8 @@
 
 public interface ISaleService
 {
-    void StartSaleAsync();
+    void StartSale();
     Task<OperationResult> AddProductToSale(string barcode); 
-    int GetSaleTotalAsync();
-    Task<OperationResult> FinishSaleAsync(Transaction transaction);
+    int GetSaleTotal();
+    Task<OperationResult> FinishSaleAsync();
 }

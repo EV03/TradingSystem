@@ -1,4 +1,5 @@
 ﻿using Domain.CashDesk;
+using Shared.Contracts.Dtos;
 using Shared.Contracts.Exceptions;
 using Shared.Contracts.Interfaces;
 
@@ -13,7 +14,7 @@ public class SaleService : ISaleService
     {
         _storeCommunication = storeCommunication;
     }
-    public void StartSaleAsync()
+    public void StartSale()
     {
         if (_sale != null)
         {
@@ -24,6 +25,10 @@ public class SaleService : ISaleService
 
     public async Task<OperationResult> AddProductToSale(string barcode)
     {
+        if (_sale == null)
+        {
+            throw new InvalidOperationException("No sale in progress.");
+        }
         try
         {
             var product = await _storeCommunication.GetProduct(barcode);
@@ -41,14 +46,33 @@ public class SaleService : ISaleService
         }
     }
 
-    public int GetSaleTotalAsync()
+    public int GetSaleTotal()
     {
         return _sale.Total;
     }
 
-    public Task<OperationResult> FinishSaleAsync(Transaction transaction)
+    public async Task<OperationResult> FinishSaleAsync()
     {
-        throw new NotImplementedException();
+        if (_sale == null || _sale.IsEmpty())
+        {
+            return OperationResult.Canceled();
+        }
+        
+        var transactionDto = new TransactionDto
+        {
+            Items = _sale.Items.ToDictionary(i => i.Barcode, i => i.Quantity)
+        };
+        try
+        {
+             await _storeCommunication.UpdateInventory(transactionDto);
+            _sale = null;
+            return OperationResult.Success();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error trying to update the inventory " + e.Message);
+            return OperationResult.Failure(e.Message);
+        }
     }
     
 }
