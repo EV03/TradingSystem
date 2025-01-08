@@ -5,10 +5,12 @@ namespace CashDesk.Application;
 public class PaymentService : IPaymentService
 {
     IBankService _bankService; 
+    ISaleService _saleService;
     
-    public PaymentService(IBankService bankService)
+    public PaymentService(IBankService bankService, ISaleService saleService)
     {
         _bankService = bankService;
+        _saleService = saleService;
     }
     public Task<bool> PayByCash(int amount)
     {

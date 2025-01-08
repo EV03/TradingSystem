@@ -11,7 +11,7 @@ public class GrpcStoreClient : IStoreCommunication
         throw new NotImplementedException();
     }
 
-    public Task FinishSale(TransactionDto transaction)
+    public Task UpdateInventory(TransactionDto transaction)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,8 @@
-﻿namespace Domain.CashDesk;
+﻿using System.Data;
+using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
+
+namespace Domain.CashDesk;
 
 public interface IBarcodeScannerController
 {
@@ -7,6 +11,4 @@ public interface IBarcodeScannerController
     void StartListeningToBarcodes();
 
     void StopListeningToBarcodes();
-
 }
-

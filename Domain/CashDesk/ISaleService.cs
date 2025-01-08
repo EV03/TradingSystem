@@ -6,4 +6,6 @@ public interface ISaleService
     Task<OperationResult> AddProductToSale(string barcode); 
     int GetSaleTotal();
     Task<OperationResult> FinishSaleAsync();
+    
+    bool isValidBarcode(string barcode);
 }

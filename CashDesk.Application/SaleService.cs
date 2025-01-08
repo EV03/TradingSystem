@@ -48,7 +48,8 @@ public class SaleService : ISaleService
 
     public int GetSaleTotal()
     {
-        return _sale.Total;
+        if (_sale != null) return _sale.Total;
+        throw new InvalidOperationException("No sale in progress.");
     }
 
     public async Task<OperationResult> FinishSaleAsync()
@@ -62,10 +63,11 @@ public class SaleService : ISaleService
         {
             Items = _sale.Items.ToDictionary(i => i.Barcode, i => i.Quantity)
         };
+        _sale = null;
         try
         {
              await _storeCommunication.UpdateInventory(transactionDto);
-            _sale = null;
+           
             return OperationResult.Success();
         }
         catch (Exception e)
@@ -74,5 +76,9 @@ public class SaleService : ISaleService
             return OperationResult.Failure(e.Message);
         }
     }
-    
+
+    public bool isValidBarcode(string barcode)
+    {
+        return true;
+    }
 }

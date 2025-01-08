@@ -15,7 +15,7 @@ public class SilaCashBoxAdapter : ICashBoxController
         _saleService = saleService;
     }
 
-    public event EventHandler<CashboxAction>? ActionTriggered;
+    public event EventHandler<CashDeskAction>? ActionTriggered;
     public event EventHandler<string>? ListeningFailed;
 
     public void StartListeningToCashbox()
@@ -54,16 +54,27 @@ public class SilaCashBoxAdapter : ICashBoxController
             }
         });
     }
-    
-    private CashboxAction MapSilaButtonToCashDeskAction(CashboxButton silaButton)
+
+    public void StopListeningToCashbox()
+    {
+        if (_buttonStream == null)
+        {
+            throw new InvalidOperationException("Not listening to cashbox buttons.");
+        }
+
+        _buttonStream.Cancel();
+        _buttonStream = null;
+    }
+
+    private CashDeskAction MapSilaButtonToCashDeskAction(CashboxButton silaButton)
     {
         return silaButton switch
         {
-            CashboxButton.StartNewSale => CashboxAction.StartNewSale,
-            CashboxButton.FinishSale => CashboxAction.FinishSale,
-            CashboxButton.PayWithCash => CashboxAction.PayWithCash,
-            CashboxButton.PayWithCard => CashboxAction.PayWithCard,
-            CashboxButton.DisableExpressMode => CashboxAction.DisableExpressMode,
+            CashboxButton.StartNewSale => CashDeskAction.StartNewSale,
+            CashboxButton.FinishSale => CashDeskAction.FinishSale,
+            CashboxButton.PayWithCash => CashDeskAction.PayWithCash,
+            CashboxButton.PayWithCard => CashDeskAction.PayWithCard,
+            CashboxButton.DisableExpressMode => CashDeskAction.DisableExpressMode,
             _ => throw new ArgumentOutOfRangeException(nameof(silaButton), silaButton, null)
         };
     }
