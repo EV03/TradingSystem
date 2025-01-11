@@ -8,11 +8,19 @@ public class GrpcStoreClient : IStoreCommunication
 {
     public Task<ProductDto> GetProduct(string barcode)
     {
-        throw new NotImplementedException();
+       // erstmal nur ein dummy bis grpc client implementiert ist
+       
+         return Task.FromResult(new ProductDto
+         {
+              Barcode = barcode,
+              Name = "Dummy Product",
+              Price = 150
+         });
     }
 
     public Task UpdateInventory(TransactionDto transaction)
     {
-        throw new NotImplementedException();
+        // erstmal nur ein dummy bis grpc client implementiert ist
+        return Task.CompletedTask;
     }
 }

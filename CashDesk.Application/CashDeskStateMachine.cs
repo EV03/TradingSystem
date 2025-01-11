@@ -130,6 +130,12 @@ public class CashDeskSalesStateMachine
             _stateMachine.Configure(CashDeskSaleState.PrintingReceipt)
                 .OnEntry(async () =>
                 {
+                    var result = _saleService.FinishSaleAsync();
+                    if (!result.Result.IsSuccess)
+                    {
+                        Console.WriteLine("Failed to update the stores inventory. Reason: " + result.Result.ErrorMessage);
+                        // todo: retry or store in a cache and set it later
+                    }
                     Console.WriteLine("Printing receipt...");
                     _displayController.DisplayText("Printing receipt...");
                     _printerController.Print("Receipt");
@@ -137,6 +143,8 @@ public class CashDeskSalesStateMachine
                     // Simulate printing time
                     await Task.Delay(5000); 
                     Console.WriteLine("Receipt printed. Returning to Idle state...");
+                    
+                    // for new sales
                     _stateMachine.Fire(CashDeskAction.GoToIdle);
                 });
             
