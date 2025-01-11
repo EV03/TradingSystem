@@ -110,9 +110,9 @@ public class CashDeskSalesStateMachine
            .OnEntryFrom(CashDeskAction.PayWithCard, () =>
            {
                _displayController.DisplayText("Swipe card");
-               var  result = _paymentService.PayCard(_saleService.GetSaleTotal()).Result;
+               var  result = _paymentService.PayCardAsync(_saleService.GetSaleTotal());
                
-               if (result)
+               if (result.Result)
                {
                    _stateMachine.Fire(CashDeskAction.CompletePayment);
                }
@@ -124,7 +124,7 @@ public class CashDeskSalesStateMachine
            .OnEntryFrom(CashDeskAction.PayWithCash, () =>
            {
                _displayController.DisplayText("cash payment");
-               _paymentService.PayCash(_saleService.GetSaleTotal());
+               _paymentService.PayCashAsync(_saleService.GetSaleTotal());
            });
          
             _stateMachine.Configure(CashDeskSaleState.PrintingReceipt)

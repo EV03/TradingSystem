@@ -18,12 +18,14 @@ public class PaymentService : IPaymentService
 
     // cash payment is handled by the cashier so we just let it return true at this point
     // may be extended in the future
-    public Task<bool> PayCash(int amount)
+    public async Task<bool> PayCashAsync(int amount)
     {
-        return Task.FromResult(true);
+        // handle pseudo await for demonstration purposes
+        await Task.Delay(1000);
+        return true;
     }
 
-    public async Task<bool> PayCard(int amount)
+    public async Task<bool> PayCardAsync(int amount)
     {
         try
         {

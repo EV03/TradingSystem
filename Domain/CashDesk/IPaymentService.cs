@@ -2,7 +2,7 @@
 
 public interface IPaymentService
 {
-    Task<bool> PayCash(int amount);
+    Task<bool> PayCashAsync(int amount);
     
-    Task<bool> PayCard(int amount);
+    Task<bool> PayCardAsync(int amount);
 }
