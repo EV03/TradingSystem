@@ -12,12 +12,12 @@ public class PaymentService : IPaymentService
         _bankService = bankService;
         _saleService = saleService;
     }
-    public Task<bool> PayByCash(int amount)
+    public Task<bool> PayCash(int amount)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> PayByCard(int token)
+    public Task<bool> PayCard(int amount)
     {
         throw new NotImplementedException();
     }
