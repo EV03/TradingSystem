@@ -77,6 +77,7 @@ public class SaleService : ISaleService
         }
     }
 
+    // todo: implement barcode validation
     public bool isValidBarcode(string barcode)
     {
         return true;

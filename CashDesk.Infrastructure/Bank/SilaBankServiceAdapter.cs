@@ -10,12 +10,12 @@ public class SilaBankServiceAdapter : IBankService
     {
         _bankServer = bankServer;
     }
-    public async Task<OperationResult<BankTransactionContext>> CreateTransactionContextAsync(int amount)
+    public  Task<OperationResult<BankTransactionContext>> CreateTransactionContextAsync(int amount)
     {
         
         try
         {
-            var transactionContext = _bankServer.CreateContext(amount);
+            var transactionContext =  _bankServer.CreateContext(amount);
 
             byte[] challengeBytes;
             using (var memoryStream = new MemoryStream())
@@ -29,19 +29,19 @@ public class SilaBankServiceAdapter : IBankService
                 challengeBytes,
                 transactionContext.Amount
             );
-            return OperationResult<BankTransactionContext>.Success(bankTransactionContext);
+            return Task.FromResult(OperationResult<BankTransactionContext>.Success(bankTransactionContext));
         }
         catch (Exception ex)
         {
             Console.WriteLine("Error: " + ex.Message);
-            return OperationResult<BankTransactionContext>.Failure(ex.Message);
+            return Task.FromResult(OperationResult<BankTransactionContext>.Failure(ex.Message));
         }
     } 
     
     public  Task<OperationResult<AuthorizationResult>> AuthorizePaymentAsync(string contextId, string account,  string token)
     {
         try
-        {
+        {   
             _bankServer.AuthorizePayment(contextId, account, token);
             var authorizationResult = new AuthorizationResult(success: true, null);
             return Task.FromResult(OperationResult<AuthorizationResult>.Success(authorizationResult));
