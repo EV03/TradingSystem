@@ -128,6 +128,7 @@ public class CashDeskSalesStateMachine
            });
          
             _stateMachine.Configure(CashDeskSaleState.PrintingReceipt)
+                .Permit(CashDeskAction.Complete, CashDeskSaleState.Idle)
                 .OnEntry(async () =>
                 {
                     var result = _saleService.FinishSaleAsync();
@@ -145,7 +146,7 @@ public class CashDeskSalesStateMachine
                     Console.WriteLine("Receipt printed. Returning to Idle state...");
                     
                     // for new sales
-                    _stateMachine.Fire(CashDeskAction.GoToIdle);
+                    _stateMachine.Fire(CashDeskAction.Complete);
                 });
             
    }
@@ -180,6 +181,7 @@ public class CashDeskSalesStateMachine
 }
 
 /// <summary>
+/// extra state machine for the express mode because stateless libary cant handle multiple active states in one state machine
 /// ////////////////////////////////////////////////////////////////
 /// </summary>
 public enum CashDeskExpressModeState

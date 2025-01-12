@@ -11,5 +11,5 @@ public enum CashDeskAction
     CompletePayment,
     EnableExpressMode,
     DisableExpressMode,
-    GoToIdle  // Added this action to allow the CashDeskStateMachine to transition to the Idle state from any state
+    Complete   // Added this action to allow the CashDeskStateMachine to transition to the Idle state from any state
 }
