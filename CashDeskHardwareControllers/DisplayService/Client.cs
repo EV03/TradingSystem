@@ -20,7 +20,7 @@ namespace CashDeskHardwareControllers.DisplayService
     ///  <summary>
     /// Class that implements the IDisplayController interface through SiLA2
     /// </summary>
-    public partial class DisplayControllerClient : IDisplayController
+    public partial class DisplayControllerClient : IDisplayService
     {
         
         private IClientExecutionManager _executionManager;
@@ -93,7 +93,7 @@ namespace CashDeskHardwareControllers.DisplayService
         {
             get
             {
-                return typeof(IDisplayController);
+                return typeof(IDisplayService);
             }
         }
         

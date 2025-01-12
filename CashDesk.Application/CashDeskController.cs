@@ -26,9 +26,9 @@ public class CashDeskController : ICashDeskController
     }
  
 
-    public void Start()
+     public void Start()
     {
-        Console.WriteLine("CashDesk Server started.");
+        Console.WriteLine("Init CashDes");
     }
 
     public void OnActionTriggered(CashDeskAction action)

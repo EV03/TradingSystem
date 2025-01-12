@@ -17,7 +17,7 @@ namespace CashDeskHardwareControllers.DisplayService
     [Tecan.Sila2.SilaFeatureAttribute(true, "contracts")]
     [Tecan.Sila2.SilaIdentifierAttribute("DisplayController")]
     [Tecan.Sila2.SilaDisplayNameAttribute("Display Controller")]
-    public partial interface IDisplayController
+    public partial interface IDisplayService
     {
         
         ///  <summary>

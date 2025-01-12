@@ -4,9 +4,9 @@ namespace CashDeskHardwareControllers.DisplayService;
 public class SilaDisplayAdapter : Domain.CashDesk.IDisplayController
 {
     
-    private readonly IDisplayController _displayService;
+    private readonly IDisplayService _displayService;
     
-    public SilaDisplayAdapter(IDisplayController displayService)
+    public SilaDisplayAdapter(IDisplayService displayService)
     {
         _displayService = displayService;
     }
