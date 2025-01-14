@@ -16,7 +16,7 @@
     
     <ItemGroup>
       <PackageReference Include="Grpc.Core.Api" Version="2.27.0" />
-      <PackageReference Include="Tecan.Sila2" Version="4.3.9" />
+      <PackageReference Include="Tecan.Sila2" Version="4.0.2" />
     </ItemGroup>
 
 </Project>
