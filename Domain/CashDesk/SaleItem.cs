@@ -1,6 +1,6 @@
 ﻿namespace Domain.CashDesk;
 
-public class SaleItem
+public class  SaleItem
 {
     public string Barcode { get; private set; }
     public string Name { get; private set; }

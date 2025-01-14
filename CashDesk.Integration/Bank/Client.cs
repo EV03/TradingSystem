@@ -13,7 +13,7 @@ using Tecan.Sila2;
 using Tecan.Sila2.Client;
 using Tecan.Sila2.Server;
 
-namespace CashDesk.Infrastructure.Bank
+namespace CashDesk.Integration.Bank
 {
     
     

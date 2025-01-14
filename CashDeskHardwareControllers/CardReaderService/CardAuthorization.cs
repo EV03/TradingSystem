@@ -1,6 +1,8 @@
-﻿namespace Domain.CashDesk;
+﻿using Domain.CashDesk;
 
-public class CardAuthorization
+namespace CashDesk.Integration.Bank;
+
+public class CardAuthorization : ICardReaderResult
 {
    public string Account { get; set; }
     

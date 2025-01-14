@@ -13,4 +13,10 @@
       <ProjectReference Include="..\Shared.Contracts\Shared.Contracts.csproj" />
     </ItemGroup>
 
+    
+    <ItemGroup>
+      <PackageReference Include="Grpc.Core.Api" Version="2.27.0" />
+      <PackageReference Include="Tecan.Sila2" Version="4.3.9" />
+    </ItemGroup>
+
 </Project>

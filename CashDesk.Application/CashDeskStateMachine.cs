@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using System.Security.Permissions;
+﻿
 using Domain.CashDesk;
 
 namespace CashDesk.Application;
@@ -25,12 +24,11 @@ public class CashDeskSalesStateMachine
    private readonly ICardReaderController _cardReaderController;
    
    private readonly ISaleService _saleService;
-   private readonly IBankService _bankService;
    private readonly IPaymentService _paymentService;
 
    public CashDeskSalesStateMachine(ICashBoxController cashBoxController, IPrinterController printerController,
        IBarcodeScannerController barcodeScannerController, ICardReaderController cardReaderController, 
-       IDisplayController displayController , ISaleService saleService, IBankService bankService, IPaymentService paymentService) 
+       IDisplayController displayController , ISaleService saleService, IPaymentService paymentService) 
    { 
        _cashBoxController = cashBoxController;
        _printerController = printerController;
@@ -40,12 +38,12 @@ public class CashDeskSalesStateMachine
        
        // services 
        _saleService = saleService;
-       _bankService = bankService;
        _paymentService = paymentService;
        
        _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Idle); 
        _productScannedTrigger = _stateMachine.SetTriggerParameters<string>(CashDeskAction.ProductScanned);
        ConfigureStateMachine();
+       Console.WriteLine("CashDesk initialized.");
    }
    
    private void ConfigureStateMachine()
@@ -57,7 +55,7 @@ public class CashDeskSalesStateMachine
 
        _stateMachine.Configure(CashDeskSaleState.SaleActive)
            .PermitIf(_productScannedTrigger, CashDeskSaleState.SaleActive,
-               barcode => _saleService.isValidBarcode(barcode), "Invalid barcode")
+               barcode => _saleService.IsValidBarcode(barcode), "Invalid barcode")
            .Permit(CashDeskAction.FinishSale, CashDeskSaleState.PreparePayment)
            
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>
@@ -69,22 +67,15 @@ public class CashDeskSalesStateMachine
            {
                // Stop listening to barcodes while processing the scanned product
                _barcodeScannerController.StopListeningToBarcodes();
-               
-               var result = _saleService.AddProductToSale(barcode).Result;
-               if (result.IsSuccess)
+
+               try
                {
+                   var result = _saleService.AddProductToSale(barcode);
                    Console.WriteLine($"Product with barcode {barcode} added to sale.");
                }
-               else if (result.IsCanceled)
+               catch (Exception ex )
                {
-                   Console.WriteLine($"Product with barcode {barcode} not found in store.");
-               }
-               else
-               {
-                   // rpc request failed
-                   Console.WriteLine(
-                       $"Failed to add product with barcode {barcode} to sale. Reason: {result.ErrorMessage}");
-                   // todo: retry 
+                   Console.WriteLine($"Failed to add product with barcode {barcode} to sale, Reason: {ex.Message}");
                }
                // Resume listening to barcodes
                _barcodeScannerController.StartListeningToBarcodes();
@@ -109,15 +100,20 @@ public class CashDeskSalesStateMachine
            .Permit(CashDeskAction.CancelPayment, CashDeskSaleState.PreparePayment)
            .OnEntryFrom(CashDeskAction.PayWithCard, () =>
            {
-               _displayController.DisplayText("Swipe card");
-               var  result = _paymentService.PayCardAsync(_saleService.GetSaleTotal());
-               
-               if (result.Result)
-               {
+               _displayController.DisplayText("Card payment, please swipe card");
+               try
+               { 
+                   var  result = _paymentService.PayCardAsync(_saleService.GetSaleTotal());
+                   if (result.IsCanceled)
+                   {
+                        Console.WriteLine("Card payment was canceled by the client.");
+                       _stateMachine.Fire(CashDeskAction.CancelPayment);
+                   }
                    _stateMachine.Fire(CashDeskAction.CompletePayment);
                }
-               else
+               catch (Exception ex)
                {
+                   Console.WriteLine("Failed to pay with card. Reason: " + ex.Message);
                    _stateMachine.Fire(CashDeskAction.CancelPayment);
                }
            })
@@ -125,18 +121,16 @@ public class CashDeskSalesStateMachine
            {
                _displayController.DisplayText("cash payment");
                _paymentService.PayCashAsync(_saleService.GetSaleTotal());
+                _stateMachine.Fire(CashDeskAction.CompletePayment);
            });
          
             _stateMachine.Configure(CashDeskSaleState.PrintingReceipt)
                 .Permit(CashDeskAction.Complete, CashDeskSaleState.Idle)
                 .OnEntry(async () =>
-                {
+                { 
+                    // if exception occurs, the state machine will just continue normally. the sale will be cached
                     var result = _saleService.FinishSaleAsync();
-                    if (!result.Result.IsSuccess)
-                    {
-                        Console.WriteLine("Failed to update the stores inventory. Reason: " + result.Result.ErrorMessage);
-                        // todo: retry or store in a cache and set it later
-                    }
+               
                     Console.WriteLine("Printing receipt...");
                     _displayController.DisplayText("Printing receipt...");
                     _printerController.Print("Receipt");
@@ -148,7 +142,6 @@ public class CashDeskSalesStateMachine
                     // for new sales
                     _stateMachine.Fire(CashDeskAction.Complete);
                 });
-            
    }
 
    public void Fire(CashDeskAction action)
@@ -156,10 +149,20 @@ public class CashDeskSalesStateMachine
        if(!_stateMachine.CanFire(action))
        {
            Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
-           return;
+           throw new InvalidOperationException($"Action {action} cannot be fired in state {_stateMachine.State}");
        }
        _stateMachine.Fire(action);
    }
+   
+    public void Fire(CashDeskAction action, string barcode)
+    {
+         if(!_stateMachine.CanFire(action))
+         {
+              Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
+              throw new InvalidOperationException($"Action {action} cannot be fired in state {_stateMachine.State}");
+         }
+         _stateMachine.Fire(_productScannedTrigger, barcode);
+    }
    
    public bool CanFire(CashDeskAction action)
    {
@@ -181,7 +184,7 @@ public class CashDeskSalesStateMachine
 }
 
 /// <summary>
-/// extra state machine for the express mode because stateless libary cant handle multiple active states in one state machine
+/// extra state machine for the express mode because stateless library cant handle multiple active states in one state machine
 /// ////////////////////////////////////////////////////////////////
 /// </summary>
 public enum CashDeskExpressModeState

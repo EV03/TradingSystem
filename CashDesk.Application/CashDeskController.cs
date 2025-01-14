@@ -4,7 +4,7 @@
 
 namespace CashDesk.Application;
 
-public class CashDeskController : ICashDeskController
+public class CashDeskController 
 {
     private readonly ICashBoxController _cashBoxController;
     private readonly IBarcodeScannerController _barcodeScannerController;
@@ -12,8 +12,6 @@ public class CashDeskController : ICashDeskController
    
     private readonly CashDeskSalesStateMachine _salesStateMachine;
     private readonly CashDeskExpressModeStateMachine _expressModeStateMachine;
-    
-    
     
     public CashDeskController(CashDeskSalesStateMachine salesStateMachine, CashDeskExpressModeStateMachine expressModeStateMachine,
         ICashBoxController cashBoxController, IBarcodeScannerController barcodeScannerController, ICardReaderController cardReaderController)
@@ -23,17 +21,17 @@ public class CashDeskController : ICashDeskController
         _cardReaderController = cardReaderController;
         _salesStateMachine = salesStateMachine;
         _expressModeStateMachine = expressModeStateMachine;
-    }
- 
-
-     public void Start()
-    {
-        Console.WriteLine("Init CashDes");
+        
+        _cashBoxController.ActionTriggered += (sender, action) => OnActionTriggered(action);
+        _cashBoxController.ListeningFailed += (sender, args) => Console.WriteLine(args);
+        _barcodeScannerController.BarcodeScanned += (sender, barcode) => OnBarcodeScanned(barcode);
+        _barcodeScannerController.BarcodeScanningFailed += (sender, args) => Console.WriteLine(args);
     }
 
     public void OnActionTriggered(CashDeskAction action)
     {
         Console.WriteLine($"Action triggered: {action}");
+        
 
         if (_salesStateMachine.CanFire(action))
         {
@@ -48,5 +46,11 @@ public class CashDeskController : ICashDeskController
         }
         
         Console.WriteLine($"Action {action} could not be handled by any state machine.");
+    }
+    
+    public void OnBarcodeScanned(string barcode)
+    {
+        Console.WriteLine($"Barcode scanned: {barcode}");
+        _salesStateMachine.Fire(CashDeskAction.ProductScanned, barcode);
     }
 }

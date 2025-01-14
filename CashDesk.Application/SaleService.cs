@@ -23,27 +23,14 @@ public class SaleService : ISaleService
         _sale = new Sale();
     }
 
-    public async Task<OperationResult> AddProductToSale(string barcode)
+    public async Task AddProductToSale(string barcode)
     {
-        if (_sale == null)
-        {
-            throw new InvalidOperationException("No sale in progress.");
-        }
-        try
-        {
-            var product = await _storeCommunication.GetProduct(barcode);
-
-            _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price, product.Quantity));
-            return OperationResult.Success();
-        }
-        catch (ProductNotFoundException ex)
-        {
-            return OperationResult.Canceled();
-        }
-        catch (Exception e)
-        {   Console.WriteLine("Error during adding product to sale: " + e.Message);
-            return OperationResult.Failure(e.Message);
-        }
+        if (_sale == null)  throw new InvalidOperationException("No sale in progress.");
+        
+        var product = await _storeCommunication.GetProduct(barcode);
+        
+        _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price, product.Quantity));
+            
     }
 
     public int GetSaleTotal()
@@ -52,33 +39,30 @@ public class SaleService : ISaleService
         throw new InvalidOperationException("No sale in progress.");
     }
 
-    public async Task<OperationResult> FinishSaleAsync()
+    public async Task FinishSaleAsync()
     {
-        if (_sale == null || _sale.IsEmpty())
-        {
-            return OperationResult.Canceled();
-        }
+        if (_sale == null || _sale.IsEmpty()) throw new InvalidOperationException("No sale in progress.");
+        
         
         var transactionDto = new TransactionDto
         {
             Items = _sale.Items.ToDictionary(i => i.Barcode, i => i.Quantity)
         };
+        // todo : safe the sale somewhere
         _sale = null;
         try
         {
-             await _storeCommunication.UpdateInventory(transactionDto);
-           
-            return OperationResult.Success();
+            await _storeCommunication.UpdateInventory(transactionDto);
         }
         catch (Exception e)
         {
             Console.WriteLine("Error trying to update the inventory " + e.Message);
-            return OperationResult.Failure(e.Message);
+            throw;
         }
     }
 
     // todo: implement barcode validation
-    public bool isValidBarcode(string barcode)
+    public bool IsValidBarcode(string barcode)
     {
         return true;
     }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CashDesk.Infrastructure.Bank
+namespace CashDesk.Integration.Bank
 {
     
     

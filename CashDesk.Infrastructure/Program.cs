@@ -8,10 +8,8 @@ class Program
 {
      static void Main(string[] args)
     {
-        Console.WriteLine("CashDesk Server started");
-
         var serviceProvider = CashDeskDependencyInjection.ConfigureServices();
+        Console.WriteLine("CashDesk Server started");
         var cashDeskController = serviceProvider.GetRequiredService<CashDeskController>();
-        cashDeskController.Start();
     }
 }

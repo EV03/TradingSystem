@@ -4,8 +4,8 @@ using Tecan.Sila2.Client;
 using Tecan.Sila2.Client.ExecutionManagement;
 using Tecan.Sila2.Discovery;
 using CashDesk.Application;
-using CashDesk.Infrastructure.Bank;
 using CashDesk.Integration;
+using CashDesk.Integration.Bank;
 using CashDeskHardwareControllers;
 using CashDeskHardwareControllers.BarcodeScannerService;
 using CashDeskHardwareControllers.CardReaderService;
@@ -15,7 +15,6 @@ using CashDeskHardwareControllers.PrinterService;
 using CashDeskHardwareControllers.PrinterService.PrintingService;
 using Domain.CashDesk;
 using Shared.Contracts.Interfaces;
-using Tecan.Sila2;
 using IDisplayController = Domain.CashDesk.IDisplayController;
 
 namespace CashDesk.Infrastructure;
@@ -46,6 +45,11 @@ public class CashDeskDependencyInjection
             var discovery = provider.GetRequiredService<ServerDiscovery>();
             var servers = discovery.GetServers(TimeSpan.FromSeconds(10), n => n.NetworkInterfaceType == NetworkInterfaceType.Loopback);
             var bankServer = servers.FirstOrDefault(s => s.Info.Type == "BankServer");
+            if (bankServer == null)
+            {
+                throw new InvalidOperationException("No BankServer found during discovery.");
+            }
+
             return new ServerDataWrapper.BankServerData(bankServer);
         });
         

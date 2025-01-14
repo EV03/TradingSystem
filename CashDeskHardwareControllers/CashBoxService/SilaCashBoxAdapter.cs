@@ -49,7 +49,7 @@ public class SilaCashBoxAdapter : ICashBoxController
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while listening to cashbox buttons: {ex.Message}");
+                Console.WriteLine($"Error while reading the pressed button: {ex.Message}");
                 ListeningFailed?.Invoke(this, ex.Message);
             }
         });
