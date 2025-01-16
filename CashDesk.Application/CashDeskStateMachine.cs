@@ -6,6 +6,7 @@ using Stateless;
 
 public enum CashDeskSaleState
 {
+    Init,
     Idle,
     SaleActive,
     PreparePayment,
@@ -40,22 +41,30 @@ public class CashDeskSalesStateMachine
        _saleService = saleService;
        _paymentService = paymentService;
        
-       _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Idle); 
+       _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Init); 
        _productScannedTrigger = _stateMachine.SetTriggerParameters<string>(CashDeskAction.ProductScanned);
        ConfigureStateMachine();
        Console.WriteLine("CashDesk initialized.");
+       _stateMachine.Activate();
+       _stateMachine.Fire(CashDeskAction.StartNewSale); // go to idle state to call onEntry
    }
    
    private void ConfigureStateMachine()
    {
+       _stateMachine.Configure(CashDeskSaleState.Init)
+           .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.Idle);
+       
        _stateMachine.Configure(CashDeskSaleState.Idle)
            .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.SaleActive)
-           .OnEntry(()=> { _cashBoxController.StartListeningToCashbox(); });
+           .OnEntry(() =>
+           {
+               Console.WriteLine("Press buttons");
+               _cashBoxController.StartListeningToCashbox();
+           });
 
 
        _stateMachine.Configure(CashDeskSaleState.SaleActive)
-           .PermitIf(_productScannedTrigger, CashDeskSaleState.SaleActive,
-               barcode => _saleService.IsValidBarcode(barcode), "Invalid barcode")
+           .PermitReentry(_productScannedTrigger.Trigger)
            .Permit(CashDeskAction.FinishSale, CashDeskSaleState.PreparePayment)
            
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>

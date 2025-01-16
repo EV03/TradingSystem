@@ -1,4 +1,5 @@
-﻿using Domain.CashDesk;
+﻿using System.Diagnostics;
+using Domain.CashDesk;
 using Tecan.Sila2;
 
 namespace CashDeskHardwareControllers.CashBoxService;
@@ -6,13 +7,12 @@ namespace CashDeskHardwareControllers.CashBoxService;
 public class SilaCashBoxAdapter : ICashBoxController
 {
     private readonly ICashboxService _cashboxService;
-    private readonly ISaleService _saleService;
     private IIntermediateObservableCommand<CashboxButton>? _buttonStream;
     
     public SilaCashBoxAdapter(ICashboxService cashboxService, ISaleService saleService)
     {
         _cashboxService = cashboxService;
-        _saleService = saleService;
+        _buttonStream = null;
     }
 
     public event EventHandler<CashDeskAction>? ActionTriggered;
@@ -27,7 +27,7 @@ public class SilaCashBoxAdapter : ICashBoxController
 
         try
         {
-            _buttonStream = _cashboxService.ListenToCashdeskButtons();
+             _buttonStream = _cashboxService.ListenToCashdeskButtons();
         }
         catch (Exception ex)
         {
@@ -39,10 +39,11 @@ public class SilaCashBoxAdapter : ICashBoxController
         {
             try
             {
-                while (await _buttonStream.IntermediateValues.WaitToReadAsync())
+                while (_buttonStream != null && await _buttonStream.IntermediateValues.WaitToReadAsync())
                 {
                     if (_buttonStream.IntermediateValues.TryRead(out var button))
                     {
+                        Console.WriteLine("cashboxstream: " + button);
                         ActionTriggered?.Invoke(this, MapSilaButtonToCashDeskAction(button)); 
                     }
                 }

@@ -8,7 +8,6 @@ public class CashDeskController
 {
     private readonly ICashBoxController _cashBoxController;
     private readonly IBarcodeScannerController _barcodeScannerController;
-    private readonly ICardReaderController _cardReaderController;
    
     private readonly CashDeskSalesStateMachine _salesStateMachine;
     private readonly CashDeskExpressModeStateMachine _expressModeStateMachine;
@@ -18,7 +17,6 @@ public class CashDeskController
     {
         _cashBoxController = cashBoxController;
         _barcodeScannerController = barcodeScannerController;
-        _cardReaderController = cardReaderController;
         _salesStateMachine = salesStateMachine;
         _expressModeStateMachine = expressModeStateMachine;
         
