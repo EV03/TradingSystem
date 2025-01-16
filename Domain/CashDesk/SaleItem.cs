@@ -4,8 +4,8 @@ public class  SaleItem
 {
     public string Barcode { get; private set; }
     public string Name { get; private set; }
-    public int Price { get; private set; }
-    public int Quantity { get; set; }
+    public long Price { get; private set; }
+    public long Quantity { get; set; }
 
     public SaleItem(string barcode, string name, int price, int quantity = 1)
     {

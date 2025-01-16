@@ -19,12 +19,12 @@ public class PaymentService : IPaymentService
 
     // cash payment is handled by the cashier so we just let it return true at this point
     // may be extended in the future
-    public async Task PayCashAsync(int amount)
+    public async Task PayCashAsync(long amount)
     {
 
     }
 
-    public async Task PayCardAsync(int amount)
+    public async Task PayCardAsync(long amount)
     {
 
         // start with creation of a bank context

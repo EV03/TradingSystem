@@ -33,7 +33,7 @@ public class SaleService : ISaleService
             
     }
 
-    public int GetSaleTotal()
+    public long GetSaleTotal()
     {
         if (_sale != null) return _sale.Total;
         throw new InvalidOperationException("No sale in progress.");

@@ -12,7 +12,7 @@ public class SilaBankServiceAdapter : IBankService
         _bankServer = bankServer;
     }
     
-    public async Task<IBankService.BankTransactionContext> CreateTransactionContextAsync(int amount)
+    public async Task<IBankService.BankTransactionContext> CreateTransactionContextAsync(long amount)
     {
         try
         {

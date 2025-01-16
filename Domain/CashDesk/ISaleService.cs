@@ -4,7 +4,7 @@ public interface ISaleService
 {
     void StartSale();
     Task AddProductToSale(string barcode); 
-    int GetSaleTotal();
+    long GetSaleTotal();
     Task FinishSaleAsync();
     
     bool IsValidBarcode(string barcode);

@@ -8,7 +8,7 @@
         /// <param name="amount">Der Betrag der Transaktion.</param>
         /// <param name="contextData">Kontextspezifische Daten (z. B. Challenge).</param>
         /// <returns>Das Ergebnis der Kartenautorisierung.</returns>
-        Task<ICardReaderResult> WaitForCardReadAsync(int amount, byte[] contextData);
+        Task<ICardReaderResult> WaitForCardReadAsync(long amount, byte[] contextData);
 
         /// <summary>
         /// Bestätigt die aktuelle Transaktion.

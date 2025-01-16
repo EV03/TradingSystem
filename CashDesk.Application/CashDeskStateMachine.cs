@@ -66,7 +66,7 @@ public class CashDeskSalesStateMachine
        _stateMachine.Configure(CashDeskSaleState.SaleActive)
            .PermitReentry(_productScannedTrigger.Trigger)
            .Permit(CashDeskAction.FinishSale, CashDeskSaleState.PreparePayment)
-           
+
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>
            {
                _barcodeScannerController.StartListeningToBarcodes();
@@ -75,6 +75,7 @@ public class CashDeskSalesStateMachine
            .OnEntryFrom(_productScannedTrigger, barcode =>
            {
                // Stop listening to barcodes while processing the scanned product
+               _displayController.DisplayText(barcode);
                _barcodeScannerController.StopListeningToBarcodes();
 
                try
@@ -82,20 +83,22 @@ public class CashDeskSalesStateMachine
                    var result = _saleService.AddProductToSale(barcode);
                    Console.WriteLine($"Product with barcode {barcode} added to sale.");
                }
-               catch (Exception ex )
+               catch (Exception ex)
                {
                    Console.WriteLine($"Failed to add product with barcode {barcode} to sale, Reason: {ex.Message}");
                }
+
                // Resume listening to barcodes
                _barcodeScannerController.StartListeningToBarcodes();
-           })
-           .OnExit(() => _barcodeScannerController.StopListeningToBarcodes());
+           });
+          
 
        _stateMachine.Configure(CashDeskSaleState.PreparePayment)
            .Permit(CashDeskAction.PayWithCard, CashDeskSaleState.PaymentInProgress)
            .Permit(CashDeskAction.PayWithCash, CashDeskSaleState.PaymentInProgress)
            .OnEntry(() =>
            {
+               _barcodeScannerController.StopListeningToBarcodes();
                _displayController.DisplayText("Choose payment method");
            })
            .OnExit(() =>
@@ -113,6 +116,10 @@ public class CashDeskSalesStateMachine
                try
                { 
                    var  result = _paymentService.PayCardAsync(_saleService.GetSaleTotal());
+                   
+                   // block until payment is completed
+                   result.Wait();
+                   
                    if (result.IsCanceled)
                    {
                         Console.WriteLine("Card payment was canceled by the client.");

@@ -13,7 +13,7 @@ public class SilaCardReaderAdapter : ICardReaderController
     {
         _cardReaderService = cardReaderService;
     }
-    public async Task<ICardReaderResult> WaitForCardReadAsync(int amount, byte[] challenge)
+    public async Task<ICardReaderResult> WaitForCardReadAsync(long amount, byte[] challenge)
     {
         try
         {

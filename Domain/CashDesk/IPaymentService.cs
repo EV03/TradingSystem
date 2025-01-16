@@ -2,7 +2,7 @@
 
 public interface IPaymentService
 {
-    Task PayCashAsync(int amount);
+    Task PayCashAsync(long amount);
     
-    Task PayCardAsync(int amount);
+    Task PayCardAsync(long amount);
 }
