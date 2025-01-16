@@ -59,6 +59,7 @@ public class CashDeskSalesStateMachine
            .OnEntry(() =>
            {
                Console.WriteLine("Press buttons");
+                _displayController.DisplayText("Waiting for Sale to start");
                _cashBoxController.StartListeningToCashbox();
            });
 
@@ -69,6 +70,7 @@ public class CashDeskSalesStateMachine
 
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>
            {
+                _displayController.DisplayText("Sale started, scan products");
                _barcodeScannerController.StartListeningToBarcodes();
                _saleService.StartSale();
            })
@@ -119,12 +121,16 @@ public class CashDeskSalesStateMachine
                    
                    // block until payment is completed
                    result.Wait();
+                   // simulate card payment or cancel time
+                   Task.Delay(3000).Wait();
                    
                    if (result.IsCanceled)
                    {
                         Console.WriteLine("Card payment was canceled by the client.");
+                        _cardReaderController.Abort("Payment canceled");
                        _stateMachine.Fire(CashDeskAction.CancelPayment);
                    }
+                   _cardReaderController.Confirm("");
                    _stateMachine.Fire(CashDeskAction.CompletePayment);
                }
                catch (Exception ex)
@@ -150,9 +156,9 @@ public class CashDeskSalesStateMachine
                     Console.WriteLine("Printing receipt...");
                     _displayController.DisplayText("Printing receipt...");
                     _printerController.Print("Receipt");
-
+                    
                     // Simulate printing time
-                    await Task.Delay(5000); 
+                    await Task.Delay(4000); 
                     Console.WriteLine("Receipt printed. Returning to Idle state...");
                     
                     // for new sales

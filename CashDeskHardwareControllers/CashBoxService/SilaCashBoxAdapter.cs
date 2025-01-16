@@ -43,7 +43,6 @@ public class SilaCashBoxAdapter : ICashBoxController
                 {
                     if (_buttonStream.IntermediateValues.TryRead(out var button))
                     {
-                        Console.WriteLine("cashboxstream: " + button);
                         ActionTriggered?.Invoke(this, MapSilaButtonToCashDeskAction(button)); 
                     }
                 }

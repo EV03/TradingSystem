@@ -15,6 +15,7 @@ public class SilaPrinterAdapter : IPrinterController
     }
     public void Print(string content)
     {
+        _printingService.StartNext();
         _printingService.PrintLine(content);
     }
 }

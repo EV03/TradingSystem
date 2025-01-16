@@ -64,10 +64,10 @@ public class CashDeskDependencyInjection
 
         services.AddSingleton<IBankServer>(provider =>
         {
-            var terminalServer = provider.GetRequiredService<ServerDataWrapper.TerminalServerData>();
+            var bankServerData = provider.GetRequiredService<ServerDataWrapper.BankServerData>();
             var executionManagerFactory = provider.GetRequiredService<ExecutionManagerFactory>();
-            var executionManager = executionManagerFactory.CreateExecutionManager(terminalServer.Data);
-            return new BankServerClient(terminalServer.Data.Channel, executionManager);
+            var executionManager = executionManagerFactory.CreateExecutionManager(bankServerData.Data);
+            return new BankServerClient(bankServerData.Data.Channel, executionManager);
         });
 
         services.AddSingleton<IBarcodeScannerService>(provider =>
