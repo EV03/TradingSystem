@@ -4,6 +4,7 @@ using Shared.Contracts.Interfaces;
 
 namespace CashDesk.Integration;
 
+// Todo : sobald store grpc service implementiert ist, wird dieser client angepasst
 public class GrpcStoreClient : IStoreCommunication
 {
     public Task<ProductDto> GetProduct(string barcode)
@@ -14,7 +15,8 @@ public class GrpcStoreClient : IStoreCommunication
          {
               Barcode = barcode,
               Name = "Dummy Product",
-              Price = 150
+              Price = 150,
+              Quantity = 1
          });
     }
 
