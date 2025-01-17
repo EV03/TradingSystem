@@ -30,7 +30,7 @@ public class SilaBarcodeScannerAdapter : IBarcodeScannerController
        }
        catch (Exception ex)
        {
-           Console.WriteLine($"Error start listening to barcodes: {ex.Message}");
+           Console.WriteLine($"Error trying to listen to barcodes: {ex.Message}");
            BarcodeScanningFailed?.Invoke(this, ex.Message); 
            return;
        }
@@ -59,7 +59,7 @@ public class SilaBarcodeScannerAdapter : IBarcodeScannerController
     {
         if(_barcodeStream == null)
         {
-            throw new InvalidOperationException("Not listening to barcodescanner.");
+            throw new InvalidOperationException("Not listening to barcodes.");
         }
         _barcodeStream.Cancel();
         _barcodeStream = null;

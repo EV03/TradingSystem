@@ -58,7 +58,7 @@ public class CashDeskSalesStateMachine
            .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.SaleActive)
            .OnEntry(() =>
            {
-               Console.WriteLine("Press buttons");
+               Console.WriteLine("Press 'Start New Sale' to begin a new sale.");
                 _displayController.DisplayText("Waiting for Sale to start");
                _cashBoxController.StartListeningToCashbox();
            });
@@ -70,6 +70,7 @@ public class CashDeskSalesStateMachine
 
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>
            {
+                Console.WriteLine("Sale started, scan products");
                 _displayController.DisplayText("Sale started, scan products");
                _barcodeScannerController.StartListeningToBarcodes();
                _saleService.StartSale();
@@ -92,15 +93,22 @@ public class CashDeskSalesStateMachine
 
                // Resume listening to barcodes
                _barcodeScannerController.StartListeningToBarcodes();
+               
            });
           
 
        _stateMachine.Configure(CashDeskSaleState.PreparePayment)
            .Permit(CashDeskAction.PayWithCard, CashDeskSaleState.PaymentInProgress)
            .Permit(CashDeskAction.PayWithCash, CashDeskSaleState.PaymentInProgress)
-           .OnEntry(() =>
+           .OnEntryFrom( CashDeskAction.FinishSale, () =>
            {
+               Console.WriteLine("Sale finished, payment method has to be chosen");
+               _displayController.DisplayText("Choose payment method");
                _barcodeScannerController.StopListeningToBarcodes();
+              
+           })
+           .OnEntryFrom(CashDeskAction.CancelPayment, () =>
+           {
                _displayController.DisplayText("Choose payment method");
            })
            .OnExit(() =>
@@ -114,33 +122,34 @@ public class CashDeskSalesStateMachine
            .Permit(CashDeskAction.CancelPayment, CashDeskSaleState.PreparePayment)
            .OnEntryFrom(CashDeskAction.PayWithCard, () =>
            {
+               Console.WriteLine("card payment started, waiting for card swipe");
                _displayController.DisplayText("Card payment, please swipe card");
                try
                { 
+                   
                    var  result = _paymentService.PayCardAsync(_saleService.GetSaleTotal());
                    
                    // block until payment is completed
                    result.Wait();
                    // simulate card payment or cancel time
+                   Console.WriteLine("Uploading data, wait a few seconds...");
                    Task.Delay(3000).Wait();
                    
-                   if (result.IsCanceled)
-                   {
-                        Console.WriteLine("Card payment was canceled by the client.");
-                        _cardReaderController.Abort("Payment canceled");
-                       _stateMachine.Fire(CashDeskAction.CancelPayment);
-                   }
                    _cardReaderController.Confirm("");
                    _stateMachine.Fire(CashDeskAction.CompletePayment);
                }
                catch (Exception ex)
                {
-                   Console.WriteLine("Failed to pay with card. Reason: " + ex.Message);
+                     Console.WriteLine("Card payment got canceled, choose card or cash payment again");  
+                    // payment method has to be chosen again
+                   _cashBoxController.StartListeningToCashbox();
+                   
                    _stateMachine.Fire(CashDeskAction.CancelPayment);
                }
            })
            .OnEntryFrom(CashDeskAction.PayWithCash, () =>
            {
+                Console.WriteLine("cash payment started");
                _displayController.DisplayText("cash payment");
                _paymentService.PayCashAsync(_saleService.GetSaleTotal());
                 _stateMachine.Fire(CashDeskAction.CompletePayment);
@@ -150,16 +159,19 @@ public class CashDeskSalesStateMachine
                 .Permit(CashDeskAction.Complete, CashDeskSaleState.Idle)
                 .OnEntry(async () =>
                 { 
+                    Console.WriteLine("payment succesful");
                     // if exception occurs, the state machine will just continue normally. the sale will be cached
-                    var result = _saleService.FinishSaleAsync();
-               
-                    Console.WriteLine("Printing receipt...");
-                    _displayController.DisplayText("Printing receipt...");
-                    _printerController.Print("Receipt");
+                    Console.WriteLine("update Inventory or cache if not possible\n");
+                    await _saleService.FinishSaleAsync();
                     
-                    // Simulate printing time
-                    await Task.Delay(4000); 
-                    Console.WriteLine("Receipt printed. Returning to Idle state...");
+                    await Task.Delay(1000);
+                    Console.WriteLine("Printing receipt...\n");
+                    _displayController.DisplayText("Printing receipt...");
+
+                    // simulating printing time
+                    await Task.Delay(3000);
+                    _printerController.Print("Receipt");
+                    Console.WriteLine("Receipt printed. Returning to Idle state...\n\n");
                     
                     // for new sales
                     _stateMachine.Fire(CashDeskAction.Complete);
@@ -188,7 +200,7 @@ public class CashDeskSalesStateMachine
    
    public bool CanFire(CashDeskAction action)
    {
-       return _stateMachine.CanFire(action);
+       return _stateMachine.CanFire(action) && action != CashDeskAction.CancelPayment;
    }
    
    public void Info()

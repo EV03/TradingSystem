@@ -21,9 +21,6 @@ class Program
             e.Cancel = true;
             cts.Cancel();
         };
-
-        Console.WriteLine("Press Ctrl+C to stop the server...");
-
         // Block until the token is canceled by Ctrl+C
         cts.Token.WaitHandle.WaitOne();
         Console.WriteLine("Stopping server.");

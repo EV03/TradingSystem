@@ -28,9 +28,6 @@ public class CashDeskController
 
     public void OnActionTriggered(CashDeskAction action)
     {
-        Console.WriteLine($"Action triggered: {action}");
-        
-
         if (_salesStateMachine.CanFire(action))
         {
             _salesStateMachine.Fire(action);
@@ -48,7 +45,6 @@ public class CashDeskController
     
     public void OnBarcodeScanned(string barcode)
     {
-        Console.WriteLine($"Barcode scanned: {barcode}");
         _salesStateMachine.Fire(CashDeskAction.ProductScanned, barcode);
     }
 }
