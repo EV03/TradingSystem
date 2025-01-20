@@ -2,5 +2,5 @@
 
 public interface IExpressModeService
 {
-    
+    bool IsExpressMode();
 }

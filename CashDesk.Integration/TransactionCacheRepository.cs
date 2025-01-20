@@ -8,7 +8,7 @@ public class TransactionCacheRepository : ITransactionRepository
     
     public void SaveTransaction(Transaction transaction)
     {
-        throw new NotImplementedException();
+        return;
     }
 
     public IEnumerable<Transaction> GetAllTransactions()

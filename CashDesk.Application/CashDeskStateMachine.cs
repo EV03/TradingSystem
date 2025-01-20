@@ -1,4 +1,7 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.JavaScript;
 using Domain.CashDesk;
 
 namespace CashDesk.Application;
@@ -18,6 +21,8 @@ public class CashDeskSalesStateMachine
    private readonly StateMachine<CashDeskSaleState, CashDeskAction> _stateMachine;
    private readonly StateMachine<CashDeskSaleState, CashDeskAction>.TriggerWithParameters<string> _productScannedTrigger;
    
+   private readonly CashDeskExpressModeStateMachine _expressModeStateMachine;
+   
    private readonly ICashBoxController _cashBoxController;
    private readonly IPrinterController _printerController;
    private readonly IDisplayController _displayController;
@@ -26,10 +31,16 @@ public class CashDeskSalesStateMachine
    
    private readonly ISaleService _saleService;
    private readonly IPaymentService _paymentService;
+   private readonly IExpressModeService _expressModeService; 
+   private readonly ITransactionRepository _transactionRepository;
+   
+   // to store the sale items in the sale and create a transaction
+   List<SaleItem>  _saleItem;
+   private String _paymentMethod; 
 
    public CashDeskSalesStateMachine(ICashBoxController cashBoxController, IPrinterController printerController,
-       IBarcodeScannerController barcodeScannerController, ICardReaderController cardReaderController, 
-       IDisplayController displayController , ISaleService saleService, IPaymentService paymentService) 
+       IBarcodeScannerController barcodeScannerController, ICardReaderController cardReaderController, CashDeskExpressModeStateMachine expressModeStateMachine,
+       IDisplayController displayController , ISaleService saleService, IPaymentService paymentService, IExpressModeService expressModeService, ITransactionRepository transactionRepository) 
    { 
        _cashBoxController = cashBoxController;
        _printerController = printerController;
@@ -40,8 +51,13 @@ public class CashDeskSalesStateMachine
        // services 
        _saleService = saleService;
        _paymentService = paymentService;
-       
-       _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Init); 
+       _expressModeService = expressModeService;
+       _transactionRepository = transactionRepository;
+       _paymentMethod = null!;
+       _saleItem = null!;
+
+       _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Init);
+         _expressModeStateMachine = expressModeStateMachine;
        _productScannedTrigger = _stateMachine.SetTriggerParameters<string>(CashDeskAction.ProductScanned);
        ConfigureStateMachine();
        Console.WriteLine("CashDesk initialized.");
@@ -51,6 +67,7 @@ public class CashDeskSalesStateMachine
    
    private void ConfigureStateMachine()
    {
+       
        _stateMachine.Configure(CashDeskSaleState.Init)
            .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.Idle);
        
@@ -58,8 +75,15 @@ public class CashDeskSalesStateMachine
            .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.SaleActive)
            .OnEntry(() =>
            {
-               Console.WriteLine("Press 'Start New Sale' to begin a new sale.");
-                _displayController.DisplayText("Waiting for Sale to start");
+               if (_expressModeStateMachine.State() == CashDeskExpressModeState.Enabled)
+               {
+                   _displayController.DisplayText("Waiting for Sale to Start. Express Mode Enabled");
+               }
+               else
+               {
+                   _displayController.DisplayText("Waiting for Sale to start. Express Mode Disabled");
+               }
+               Console.WriteLine("Press 'Start New Sale' to begin a new sale. expressmode state: " + _expressModeStateMachine.State());
                _cashBoxController.StartListeningToCashbox();
            });
 
@@ -90,10 +114,10 @@ public class CashDeskSalesStateMachine
                {
                    Console.WriteLine($"Failed to add product with barcode {barcode} to sale, Reason: {ex.Message}");
                }
-
-               // Resume listening to barcodes
-               _barcodeScannerController.StartListeningToBarcodes();
-               
+               finally
+               {
+                   _barcodeScannerController.StartListeningToBarcodes();
+               }
            });
           
 
@@ -109,6 +133,7 @@ public class CashDeskSalesStateMachine
            })
            .OnEntryFrom(CashDeskAction.CancelPayment, () =>
            {
+               _cashBoxController.StartListeningToCashbox();
                _displayController.DisplayText("Choose payment method");
            })
            .OnExit(() =>
@@ -136,14 +161,12 @@ public class CashDeskSalesStateMachine
                    Task.Delay(3000).Wait();
                    
                    _cardReaderController.Confirm("");
+                   _paymentMethod = "CardPayment";
                    _stateMachine.Fire(CashDeskAction.CompletePayment);
                }
                catch (Exception ex)
                {
                      Console.WriteLine("Card payment got canceled, choose card or cash payment again");  
-                    // payment method has to be chosen again
-                   _cashBoxController.StartListeningToCashbox();
-                   
                    _stateMachine.Fire(CashDeskAction.CancelPayment);
                }
            })
@@ -152,6 +175,7 @@ public class CashDeskSalesStateMachine
                 Console.WriteLine("cash payment started");
                _displayController.DisplayText("cash payment");
                _paymentService.PayCashAsync(_saleService.GetSaleTotal());
+               _paymentMethod = "CashPayment";
                 _stateMachine.Fire(CashDeskAction.CompletePayment);
            });
          
@@ -160,8 +184,7 @@ public class CashDeskSalesStateMachine
                 .OnEntry(async () =>
                 { 
                     Console.WriteLine("payment succesful");
-                    // if exception occurs, the state machine will just continue normally. the sale will be cached
-                    Console.WriteLine("update Inventory or cache if not possible\n");
+                    
                     await _saleService.FinishSaleAsync();
                     
                     await Task.Delay(1000);
@@ -172,7 +195,17 @@ public class CashDeskSalesStateMachine
                     await Task.Delay(3000);
                     _printerController.Print("Receipt");
                     Console.WriteLine("Receipt printed. Returning to Idle state...\n\n");
-                    
+
+                    if (_saleService.Sale?.Items != null) _saleItem = _saleService.Sale.Items;
+                    _transactionRepository.SaveTransaction( new Transaction(_saleItem, _paymentMethod));
+                    _saleItem = null!;
+                    _paymentMethod = "";
+
+                    if(_expressModeStateMachine.State() == CashDeskExpressModeState.Disabled)
+                    {
+                       var expressMode =  _expressModeService.IsExpressMode();
+                       if(expressMode) _expressModeStateMachine.Fire(CashDeskExpressModeActions.EnableExpressMode);
+                    }
                     // for new sales
                     _stateMachine.Fire(CashDeskAction.Complete);
                 });
@@ -180,22 +213,14 @@ public class CashDeskSalesStateMachine
 
    public void Fire(CashDeskAction action)
    {
-       if(!_stateMachine.CanFire(action))
-       {
-           Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
-           throw new InvalidOperationException($"Action {action} cannot be fired in state {_stateMachine.State}");
-       }
-       _stateMachine.Fire(action);
+       if(_stateMachine.CanFire(action)) _stateMachine.Fire(action);
+       else Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
    }
    
     public void Fire(CashDeskAction action, string barcode)
     {
-         if(!_stateMachine.CanFire(action))
-         {
-              Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
-              throw new InvalidOperationException($"Action {action} cannot be fired in state {_stateMachine.State}");
-         }
-         _stateMachine.Fire(_productScannedTrigger, barcode);
+        if(_stateMachine.CanFire(action)) _stateMachine.Fire(_productScannedTrigger, barcode);
+        else Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
     }
    
    public bool CanFire(CashDeskAction action)
@@ -235,30 +260,49 @@ public enum CashDeskExpressModeActions
 
 public class CashDeskExpressModeStateMachine
 {
-    private readonly StateMachine<CashDeskExpressModeState, CashDeskAction> _stateMachine;
+    private readonly StateMachine<CashDeskExpressModeState, CashDeskExpressModeActions> _stateMachine;
     
-    public CashDeskExpressModeStateMachine()
+    private readonly IDisplayController _displayController;
+    
+    public CashDeskExpressModeStateMachine(IDisplayController displayController)
     {
-        _stateMachine = new StateMachine<CashDeskExpressModeState, CashDeskAction>(CashDeskExpressModeState.Disabled);
+        _displayController = displayController;
+        _stateMachine = new StateMachine<CashDeskExpressModeState, CashDeskExpressModeActions>(CashDeskExpressModeState.Disabled);
         ConfigureStateMachine();
     }
 
     private void ConfigureStateMachine()
     {
         _stateMachine.Configure(CashDeskExpressModeState.Disabled)
-            .Permit(CashDeskAction.EnableExpressMode, CashDeskExpressModeState.Enabled);
+            .Permit(CashDeskExpressModeActions.EnableExpressMode, CashDeskExpressModeState.Enabled)
+            .OnEntryFrom(CashDeskExpressModeActions.DisableExpressMode, () =>
+            {
+                Console.WriteLine("Express Mode disabled");
+                _displayController.DisplayText("Waiting for Sale to Start. Express Mode Disabled");
+            });
         
         _stateMachine.Configure(CashDeskExpressModeState.Enabled)
-            .Permit(CashDeskAction.DisableExpressMode, CashDeskExpressModeState.Disabled);
+            .Permit(CashDeskExpressModeActions.DisableExpressMode, CashDeskExpressModeState.Disabled)
+            .OnEntry(() =>
+            {
+                Console.WriteLine("Express Mode Enabled");
+            });
     }
     
-    public void Fire(CashDeskAction action)
+    public void Fire(CashDeskExpressModeActions action)
     {
-        _stateMachine.Fire(action);
+        if(_stateMachine.CanFire(action)) _stateMachine.Fire(action);
+        else Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
     }
     
-    public bool CanFire(CashDeskAction action)
+    public bool CanFire(CashDeskExpressModeActions action)
     {
         return _stateMachine.CanFire(action);
+    }
+    
+    // returns state of the express mode
+    public CashDeskExpressModeState State()
+    {
+        return _stateMachine.State;
     }
 }

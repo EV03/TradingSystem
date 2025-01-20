@@ -111,8 +111,10 @@ public class CashDeskDependencyInjection
 
         // Register application services
         services.AddSingleton<ISaleService, SaleService>();
+        services.AddSingleton<Sale>();
         services.AddSingleton<IBankService, SilaBankServiceAdapter>();
         services.AddSingleton<IPaymentService, PaymentService>();
+        services.AddSingleton<IExpressModeService, ExpressModeService>();
 
         // Register integration services
         services.AddSingleton<ITransactionRepository, TransactionCacheRepository>();

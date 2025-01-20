@@ -9,7 +9,6 @@ public enum CashDeskAction
     PayWithCard,
     CancelPayment,
     CompletePayment,
-    EnableExpressMode,
     DisableExpressMode,
     Complete   // Added this action to allow the CashDeskStateMachine to transition to the Idle state from any state
 }

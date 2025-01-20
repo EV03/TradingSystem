@@ -5,21 +5,21 @@ using Shared.Contracts.Interfaces;
 
 namespace CashDesk.Application;
 
-public class SaleService : ISaleService
+public class SaleService : ISaleService  
 {
     private readonly IStoreCommunication _storeCommunication;
-    private Sale? _sale; // aktueller verkauf
+    private Sale _sale; // aktueller verkauf
     
-    public SaleService(IStoreCommunication storeCommunication)
+    public SaleService(IStoreCommunication storeCommunication, Sale sale)
     {
         _storeCommunication = storeCommunication;
+        _sale = null!;
     }
+
+    public Sale Sale { get => _sale; }
+
     public void StartSale()
     {
-        if (_sale != null)
-        {
-           throw new InvalidOperationException("A sale is already in progress.");
-        }
         _sale = new Sale();
     }
 
@@ -34,6 +34,7 @@ public class SaleService : ISaleService
     }
 
     public long GetSaleTotal()
+        
     {
         if (_sale != null) return _sale.Total;
         throw new InvalidOperationException("No sale in progress.");
@@ -43,13 +44,11 @@ public class SaleService : ISaleService
     {
         if (_sale == null || _sale.IsEmpty()) throw new InvalidOperationException("No sale in progress.");
         
-        
         var transactionDto = new TransactionDto
         {
             Items = _sale.Items.ToDictionary(i => i.Barcode, i => i.Quantity)
         };
         // todo : safe the sale somewhere
-        _sale = null;
         try
         {
             await _storeCommunication.UpdateInventory(transactionDto);

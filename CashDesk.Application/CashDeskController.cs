@@ -28,23 +28,22 @@ public class CashDeskController
 
     public void OnActionTriggered(CashDeskAction action)
     {
-        if (_salesStateMachine.CanFire(action))
-        {
-            _salesStateMachine.Fire(action);
-            return;
-        }
+        if (action != CashDeskAction.DisableExpressMode)  _salesStateMachine.Fire(action);
+        else _expressModeStateMachine.Fire(MapExpressModeAction(action));
         
-        if(_expressModeStateMachine.CanFire(action))
-        {
-            _expressModeStateMachine.Fire(action);
-            return;
-        }
-        
-        Console.WriteLine($"Action {action} could not be handled by any state machine.");
     }
     
     public void OnBarcodeScanned(string barcode)
     {
         _salesStateMachine.Fire(CashDeskAction.ProductScanned, barcode);
+    }
+    
+    public CashDeskExpressModeActions MapExpressModeAction(CashDeskAction action)
+    {
+        return action switch
+        {
+            CashDeskAction.DisableExpressMode => CashDeskExpressModeActions.DisableExpressMode,
+            _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
+        };
     }
 }
