@@ -90,8 +90,7 @@ public class CashDeskSalesStateMachine
 
        _stateMachine.Configure(CashDeskSaleState.SaleActive)
            .PermitReentry(_productScannedTrigger.Trigger)
-           .Permit(CashDeskAction.FinishSale, CashDeskSaleState.PreparePayment)
-
+           .PermitIf(CashDeskAction.FinishSale, CashDeskSaleState.PreparePayment, () => !_saleService.Sale.IsEmpty())
            .OnEntryFrom(CashDeskAction.StartNewSale, () =>
            {
                 Console.WriteLine("Sale started, scan products");
@@ -124,6 +123,7 @@ public class CashDeskSalesStateMachine
        _stateMachine.Configure(CashDeskSaleState.PreparePayment)
            .Permit(CashDeskAction.PayWithCard, CashDeskSaleState.PaymentInProgress)
            .Permit(CashDeskAction.PayWithCash, CashDeskSaleState.PaymentInProgress)
+           .Permit(CashDeskAction.CancelPayment, CashDeskSaleState.SaleActive)
            .OnEntryFrom( CashDeskAction.FinishSale, () =>
            {
                Console.WriteLine("Sale finished, payment method has to be chosen");
@@ -213,11 +213,19 @@ public class CashDeskSalesStateMachine
 
    public void Fire(CashDeskAction action)
    {
-       if(_stateMachine.CanFire(action)) _stateMachine.Fire(action);
-       else Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
+       if (_stateMachine.CanFire(action)) _stateMachine.Fire(action);
+       else
+       {
+           if (_saleService.Sale.IsEmpty() && action == CashDeskAction.FinishSale)
+           {
+               Console.WriteLine("Sale is empty, cannot finish sale");
+           }
+           else
+               Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
+       }
    }
-   
-    public void Fire(CashDeskAction action, string barcode)
+
+   public void Fire(CashDeskAction action, string barcode)
     {
         if(_stateMachine.CanFire(action)) _stateMachine.Fire(_productScannedTrigger, barcode);
         else Console.WriteLine($"Action {action} cannot be fired in state {_stateMachine.State}");
