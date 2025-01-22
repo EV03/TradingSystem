@@ -28,9 +28,7 @@ public class CashDeskController
 
     public void OnActionTriggered(CashDeskAction action)
     {
-        if (action != CashDeskAction.DisableExpressMode)  _salesStateMachine.Fire(action);
-        else _expressModeStateMachine.Fire(MapExpressModeAction(action));
-        
+         _salesStateMachine.Fire(action);
     }
     
     public void OnBarcodeScanned(string barcode)

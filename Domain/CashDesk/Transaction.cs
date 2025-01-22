@@ -4,14 +4,14 @@ public class Transaction
 {
    public List<SaleItem> SaleItems { get; private set; }
     
-   public string PaymentMehod { get; private set; }
+   public string PaymentMethod { get; private set; }
 
    public DateTime Timestamp { get; private set; }
     
     public Transaction(List<SaleItem> saleItems, string paymentMethod)
     {
         SaleItems = saleItems;
-        PaymentMehod = paymentMethod;
+        PaymentMethod = paymentMethod;
         Timestamp = DateTime.Now;
     }
 }

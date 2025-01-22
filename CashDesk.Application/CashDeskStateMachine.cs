@@ -1,7 +1,4 @@
 ﻿
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.JavaScript;
 using Domain.CashDesk;
 
 namespace CashDesk.Application;
@@ -57,7 +54,7 @@ public class CashDeskSalesStateMachine
        _saleItem = null!;
 
        _stateMachine = new StateMachine<CashDeskSaleState, CashDeskAction>(CashDeskSaleState.Init);
-         _expressModeStateMachine = expressModeStateMachine;
+       _expressModeStateMachine = expressModeStateMachine;
        _productScannedTrigger = _stateMachine.SetTriggerParameters<string>(CashDeskAction.ProductScanned);
        ConfigureStateMachine();
        Console.WriteLine("CashDesk initialized.");
@@ -73,7 +70,26 @@ public class CashDeskSalesStateMachine
        
        _stateMachine.Configure(CashDeskSaleState.Idle)
            .Permit(CashDeskAction.StartNewSale, CashDeskSaleState.SaleActive)
-           .OnEntry(() =>
+           .PermitReentry(CashDeskAction.DisableExpressMode)
+           .OnEntryFrom(CashDeskAction.DisableExpressMode, () => 
+           {
+               _expressModeStateMachine.Fire(CashDeskExpressModeActions.DisableExpressMode);
+               _displayController.DisplayText("Waiting for Sale to start. Express Mode Disabled");
+           })
+           .OnEntryFrom(CashDeskAction.StartNewSale, () =>
+           {
+               if (_expressModeStateMachine.State() == CashDeskExpressModeState.Enabled)
+               {
+                   _displayController.DisplayText("Waiting for Sale to Start. Express Mode Enabled");
+               }
+               else
+               {
+                   _displayController.DisplayText("Waiting for Sale to start. Express Mode Disabled");
+               }
+               Console.WriteLine("Press 'Start New Sale' to begin a new sale. expressmode state: " + _expressModeStateMachine.State());
+               _cashBoxController.StartListeningToCashbox();
+           })
+           .OnEntryFrom(CashDeskAction.Complete, () => 
            {
                if (_expressModeStateMachine.State() == CashDeskExpressModeState.Enabled)
                {
@@ -251,7 +267,7 @@ public class CashDeskSalesStateMachine
 }
 
 /// <summary>
-/// extra state machine for the express mode because stateless library cant handle multiple active states in one state machine
+/// extra state machine for the express mode because stateless library cant handle multiple active states in one state machine)
 /// ////////////////////////////////////////////////////////////////
 /// </summary>
 public enum CashDeskExpressModeState
@@ -286,7 +302,6 @@ public class CashDeskExpressModeStateMachine
             .OnEntryFrom(CashDeskExpressModeActions.DisableExpressMode, () =>
             {
                 Console.WriteLine("Express Mode disabled");
-                _displayController.DisplayText("Waiting for Sale to Start. Express Mode Disabled");
             });
         
         _stateMachine.Configure(CashDeskExpressModeState.Enabled)

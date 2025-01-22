@@ -13,7 +13,8 @@ public class ExpressModeService : IExpressModeService
     public bool IsExpressMode()
     {
        var recentTransactions = _transactionRepository.GetRecentTransactions();
-       int expressCheckoutCount = recentTransactions.Count(t => t.SaleItems.Count <= 8 && t.PaymentMehod == "Cash");
+       // change to 8 items later when more items are added 
+       int expressCheckoutCount = recentTransactions.Count(t => t.SaleItems.Count <= 2 && t.PaymentMethod == "CashPayment");
        int totalTransactions = recentTransactions.Count();
        
        return totalTransactions > 0 && (expressCheckoutCount / (double)totalTransactions) >= 0.5;

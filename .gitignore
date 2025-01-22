@@ -21,6 +21,7 @@ obj/
 
 # Log-Dateien
 *.log
+transactions.json
 
 # Cache-Dateien
 *.cache/
