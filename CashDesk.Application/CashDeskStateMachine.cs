@@ -91,7 +91,7 @@ public class CashDeskSalesStateMachine
            })
            .OnEntryFrom(CashDeskAction.Complete, () => 
            {
-               if (_expressModeStateMachine.State() == CashDeskExpressModeState.Enabled)
+                if (_expressModeStateMachine.State() == CashDeskExpressModeState.Enabled)
                {
                    _displayController.DisplayText("Waiting for Sale to Start. Express Mode Enabled");
                }
@@ -117,12 +117,12 @@ public class CashDeskSalesStateMachine
            .OnEntryFrom(_productScannedTrigger, barcode =>
            {
                // Stop listening to barcodes while processing the scanned product
-               _displayController.DisplayText(barcode);
                _barcodeScannerController.StopListeningToBarcodes();
 
                try
                {
-                   var result = _saleService.AddProductToSale(barcode);
+                   var task = _saleService.AddProductToSale(barcode);
+                   _displayController.DisplayText(barcode + ", " + (double) task.Result.Price / 100 + "€");
                    Console.WriteLine($"Product with barcode {barcode} added to sale.");
                }
                catch (Exception ex)

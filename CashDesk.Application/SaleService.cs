@@ -23,13 +23,15 @@ public class SaleService : ISaleService
         _sale = new Sale();
     }
 
-    public async Task AddProductToSale(string barcode)
+    public async Task<SaleItem> AddProductToSale(string barcode)
     {
         if (_sale == null)  throw new InvalidOperationException("No sale in progress.");
         
         var product = await _storeCommunication.GetProduct(barcode);
         
         _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price, product.Quantity));
+        
+        return _sale.Items.Last();
             
     }
 

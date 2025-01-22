@@ -4,7 +4,7 @@ public interface ISaleService
 {
     Sale Sale { get; }
     void StartSale();
-    Task AddProductToSale(string barcode); 
+    Task<SaleItem> AddProductToSale(string barcode); 
     long GetSaleTotal();
     Task FinishSaleAsync();
     
