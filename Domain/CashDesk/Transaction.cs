@@ -2,16 +2,16 @@
 
 public class Transaction
 {
-    List<SaleItem> SaleItems { get; set; }
+   public List<SaleItem> SaleItems { get; private set; }
     
-    string paymentMehod { get; set; }
-    
-    DateTime TimeStamp { get; set; }
+   public string PaymentMehod { get; private set; }
+
+   public DateTime Timestamp { get; private set; }
     
     public Transaction(List<SaleItem> saleItems, string paymentMethod)
     {
         SaleItems = saleItems;
-        paymentMehod = paymentMethod;
-        TimeStamp = DateTime.Now;
+        PaymentMehod = paymentMethod;
+        Timestamp = DateTime.Now;
     }
 }
