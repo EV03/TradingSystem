@@ -7,7 +7,7 @@ public class  SaleItem
     public long Price { get; private set; }
     public long Quantity { get; set; }
 
-    public SaleItem(string barcode, string name, int price, int quantity = 1)
+    public SaleItem(string barcode, string name, long price, long quantity)
     {
         Barcode = barcode;
         Name = name;

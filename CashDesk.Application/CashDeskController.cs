@@ -10,9 +10,9 @@ public class CashDeskController
     private readonly IBarcodeScannerController _barcodeScannerController;
    
     private readonly CashDeskSalesStateMachine _salesStateMachine;
-    private readonly CashDeskExpressModeStateMachine _expressModeStateMachine;
+    private readonly CashDeskSalesStateMachine.CashDeskExpressModeStateMachine _expressModeStateMachine;
     
-    public CashDeskController(CashDeskSalesStateMachine salesStateMachine, CashDeskExpressModeStateMachine expressModeStateMachine,
+    public CashDeskController(CashDeskSalesStateMachine salesStateMachine, CashDeskSalesStateMachine.CashDeskExpressModeStateMachine expressModeStateMachine,
         ICashBoxController cashBoxController, IBarcodeScannerController barcodeScannerController, ICardReaderController cardReaderController)
     {
         _cashBoxController = cashBoxController;
@@ -36,11 +36,11 @@ public class CashDeskController
         _salesStateMachine.Fire(CashDeskAction.ProductScanned, barcode);
     }
     
-    public CashDeskExpressModeActions MapExpressModeAction(CashDeskAction action)
+    public CashDeskSalesStateMachine.CashDeskExpressModeActions MapExpressModeAction(CashDeskAction action)
     {
         return action switch
         {
-            CashDeskAction.DisableExpressMode => CashDeskExpressModeActions.DisableExpressMode,
+            CashDeskAction.DisableExpressMode => CashDeskSalesStateMachine.CashDeskExpressModeActions.DisableExpressMode,
             _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };
     }

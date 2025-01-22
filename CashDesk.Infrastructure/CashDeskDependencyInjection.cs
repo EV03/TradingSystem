@@ -122,7 +122,7 @@ public class CashDeskDependencyInjection
 
         // Register state machines
         services.AddSingleton<CashDeskSalesStateMachine>();
-        services.AddSingleton<CashDeskExpressModeStateMachine>();
+        services.AddSingleton<CashDeskSalesStateMachine.CashDeskExpressModeStateMachine>();
 
         // Register the CashDeskController
         services.AddSingleton<CashDeskController>();
