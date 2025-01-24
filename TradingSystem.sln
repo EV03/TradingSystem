@@ -41,13 +41,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashDeskHardwareControllers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashDesk.Infrastructure", "CashDesk.Infrastructure\CashDesk.Infrastructure.csproj", "{868BEAF7-FC5C-4006-9008-86239D1E9266}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Store.Angular", "Store.Angular\Store.Angular.esproj", "{E00E10A4-8B6E-402E-A251-88AF74039731}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7F8252C7-3506-4CBA-BAB0-5E7959DD288A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -126,5 +125,14 @@ Global
 		{868BEAF7-FC5C-4006-9008-86239D1E9266}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{868BEAF7-FC5C-4006-9008-86239D1E9266}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{868BEAF7-FC5C-4006-9008-86239D1E9266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00E10A4-8B6E-402E-A251-88AF74039731}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
