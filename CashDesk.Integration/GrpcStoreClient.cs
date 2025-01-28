@@ -16,7 +16,6 @@ public class GrpcStoreClient : IStoreCommunication
               Barcode = barcode,
               Name = "Dummy Product",
               Price = 150,
-              Quantity = 1
          });
     }
 

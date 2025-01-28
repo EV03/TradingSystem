@@ -29,7 +29,7 @@ public class SaleService : ISaleService
         
         var product = await _storeCommunication.GetProduct(barcode);
         
-        _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price, product.Quantity));
+        _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price));
         
         return _sale.Items.Last();
             
