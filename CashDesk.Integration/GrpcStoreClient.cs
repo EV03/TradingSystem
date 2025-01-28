@@ -1,27 +1,37 @@
-﻿using Shared.Contracts;
+﻿using Grpc.Net.Client;
 using Shared.Contracts.Dtos;
 using Shared.Contracts.Interfaces;
+using Shared.Contracts.Protos;
+
 
 namespace CashDesk.Integration;
 
-// Todo : sobald store grpc service implementiert ist, wird dieser client angepasst
 public class GrpcStoreClient : IStoreCommunication
 {
-    public Task<ProductDto> GetProduct(string barcode)
+    private readonly Product.ProductClient _productServiceClient;
+    public GrpcStoreClient()
     {
-       // erstmal nur ein dummy bis grpc client implementiert ist
-       
-         return Task.FromResult(new ProductDto
-         {
-              Barcode = barcode,
-              Name = "Dummy Product",
-              Price = 150,
-         });
+        var channel = GrpcChannel.ForAddress("https://localhost:5001"); 
+        _productServiceClient = new Product.ProductClient(channel);
+    }
+    // grpc client stub 
+    public async Task<ProductDto> GetProduct(string barcode)
+    {
+        var request = new ProductRequest() { Barcode = barcode };
+        
+        var response = await _productServiceClient.GetProductInfoAsync(request);
+        
+        return new ProductDto
+        {
+            Name = response.Name,
+            Barcode = response.Barcode,
+            Price = (int) response.Price * 100
+        };
     }
 
-    public Task UpdateInventory(TransactionDto transaction)
+    public async  Task UpdateInventory(TransactionDto transaction)
     {
         // erstmal nur ein dummy bis grpc client implementiert ist
-        return Task.CompletedTask;
+         await Task.CompletedTask;
     }
 }

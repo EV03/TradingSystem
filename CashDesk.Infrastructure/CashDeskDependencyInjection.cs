@@ -14,7 +14,9 @@ using CashDeskHardwareControllers.DisplayService;
 using CashDeskHardwareControllers.PrinterService;
 using CashDeskHardwareControllers.PrinterService.PrintingService;
 using Domain.CashDesk;
+using Shared.Contracts;
 using Shared.Contracts.Interfaces;
+using Shared.Contracts.Protos;
 using IDisplayController = Domain.CashDesk.IDisplayController;
 
 namespace CashDesk.Infrastructure;
@@ -126,6 +128,12 @@ public class CashDeskDependencyInjection
 
         // Register the CashDeskController
         services.AddSingleton<CashDeskController>();
+        
+        // Register gRPC client
+        services.AddGrpcClient<Product.ProductClient>(o =>
+        {
+            o.Address = new Uri("https://localhost:5001");
+        });
 
         return services.BuildServiceProvider();
     }

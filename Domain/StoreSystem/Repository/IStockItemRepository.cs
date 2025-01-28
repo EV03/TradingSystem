@@ -6,6 +6,8 @@ public interface IStockItemRepository
 {
     StockItem GetByIdAsync(Guid id);
     
+    
+    Task<StockItem> GetByBarcodeAsync(string barcode);
     Task SaveAsync(StockItem stockItem);
     
     Task UpdateAsync(StockItem stockItem);

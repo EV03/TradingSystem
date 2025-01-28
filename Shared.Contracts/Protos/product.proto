@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+package Shared.Contracts.Protos;
+
+service Product {
+  rpc GetProductInfo (ProductRequest) returns (ProductResponse);
+}
+
+message ProductRequest {
+  string barcode = 1;
+}
+
+message ProductResponse {
+  string barcode = 1;
+  string name = 2;
+  float price = 3;
+}

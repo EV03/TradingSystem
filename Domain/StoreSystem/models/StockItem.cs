@@ -3,7 +3,10 @@
 public class StockItem
 {
     Guid Id { get; set; }
-    double SalesPrice { get; set; }
+    public float  SalesPrice { get; set; }
+    public string Name { get; set; }
+    public string Barcode { get; set; }
+    
     int MinStock { get; set; } // for low stock alert
     public int AvailableQuantity { get; set; }
     public int OutGoingQuantity  { get; set; } // quantity sent to another store ( unavailable )
