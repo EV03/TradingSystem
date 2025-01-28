@@ -132,7 +132,7 @@ public class CashDeskDependencyInjection
         // Register gRPC client
         services.AddGrpcClient<Product.ProductClient>(o =>
         {
-            o.Address = new Uri("https://localhost:5001");
+            o.Address = new Uri("https://localhost:5131");
         });
 
         return services.BuildServiceProvider();

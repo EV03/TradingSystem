@@ -21,7 +21,7 @@ public class PaymentService : IPaymentService
     // may be extended in the future
     public async Task PayCashAsync(long amount)
     {
-
+        await Task.CompletedTask;
     }
 
     public async Task PayCardAsync(long amount)
