@@ -4,6 +4,7 @@ package Shared.Contracts.Protos;
 
 service Product {
   rpc GetProductInfo (ProductRequest) returns (ProductResponse);
+  rpc UpdateInventory (UpdateInventoryRequest) returns (UpdateInventoryResponse);
 }
 
 message ProductRequest {
@@ -14,4 +15,17 @@ message ProductResponse {
   string barcode = 1;
   string name = 2;
   float price = 3;
+}
+
+message UpdateInventoryRequest {
+  repeated TransactionItem items = 1;
+}
+
+message TransactionItem {
+  string barcode = 1;
+  int64 quantity = 2;
+}
+
+message UpdateInventoryResponse {
+  bool success = 1;
 }

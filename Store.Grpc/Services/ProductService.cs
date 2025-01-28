@@ -1,6 +1,5 @@
 ﻿using Domain.StoreSystem.repository;
 using Grpc.Core;
-using Shared.Contracts;
 using Shared.Contracts.Protos;
 
 namespace Store.Grpc.Services
@@ -27,6 +26,28 @@ namespace Store.Grpc.Services
                     Name = product.Name,
                     Barcode = product.Barcode,
                     Price = product.SalesPrice,
+                };
+            }
+            
+            public override async Task<UpdateInventoryResponse> UpdateInventory(UpdateInventoryRequest request, ServerCallContext context)
+            {
+
+                foreach (var item in request.Items)
+                {
+                    var product = await _stockItemRepository.GetByBarcodeAsync(item.Barcode);
+
+                    if (product == null)
+                    {
+                        throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
+                    }
+
+                    product.AvailableQuantity -=  item.Quantity;
+                    await _stockItemRepository.UpdateAsync(product);
+                }
+
+                return new UpdateInventoryResponse
+                {
+                    Success = true
                 };
             }
         }

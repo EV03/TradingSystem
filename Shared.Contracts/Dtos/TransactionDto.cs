@@ -2,5 +2,5 @@
 
 public class TransactionDto
 {
-   public Dictionary<string, long>? Items { get; set; }
+   public Dictionary<string, long> Items { get; set; }
 }

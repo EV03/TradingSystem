@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Google.Protobuf.Collections;
+using Grpc.Net.Client;
 using Shared.Contracts.Dtos;
 using Shared.Contracts.Interfaces;
 using Shared.Contracts.Protos;
@@ -11,7 +12,7 @@ public class GrpcStoreClient : IStoreCommunication
     private readonly Product.ProductClient _productServiceClient;
     public GrpcStoreClient()
     {
-        var channel = GrpcChannel.ForAddress("https://localhost:5001"); 
+        var channel = GrpcChannel.ForAddress("https://localhost:5131"); 
         _productServiceClient = new Product.ProductClient(channel);
     }
     // grpc client stub 
@@ -31,7 +32,25 @@ public class GrpcStoreClient : IStoreCommunication
 
     public async  Task UpdateInventory(TransactionDto transaction)
     {
-        // erstmal nur ein dummy bis grpc client implementiert ist
-         await Task.CompletedTask;
+        var request = new UpdateInventoryRequest
+        {
+            Items =
+            {
+                transaction.Items.Select(item => new TransactionItem
+                {
+                    Barcode = item.Key,
+                    Quantity = item.Value 
+                })
+            }
+        };
+        
+       var result =  await _productServiceClient.UpdateInventoryAsync(request);
+       
+       /* retry logic can be added here 
+         if (!result.Success)
+         {
+              throw new Exception("Failed to update inventory");
+         }
+         */
     }
 }
