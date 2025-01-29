@@ -23,7 +23,7 @@ message UpdateInventoryRequest {
 
 message TransactionItem {
   string barcode = 1;
-  int64 quantity = 2;
+  int32 quantity = 2;
 }
 
 message UpdateInventoryResponse {

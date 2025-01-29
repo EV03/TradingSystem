@@ -8,8 +8,8 @@ public class StockItem
     public string Barcode { get; set; }
     
     int MinStock { get; set; } // for low stock alert
-    public long AvailableQuantity { get; set; }
-    public long OutGoingQuantity  { get; set; } // quantity sent to another store ( unavailable )
+    public int AvailableQuantity { get; set; }
+    public int OutGoingQuantity  { get; set; } // quantity sent to another store ( unavailable )
     
     public Guid ProductId { get; set; }
     public Guid StoreId { get; set; }

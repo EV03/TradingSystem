@@ -22,10 +22,11 @@ namespace Store.Integration
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed data 
             modelBuilder.Entity<StockItem>().HasData(
-                new StockItem { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate" ,AvailableQuantity = 100, SalesPrice = 10 },
-                new StockItem { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", AvailableQuantity = 200, SalesPrice = 5 },
-                new StockItem { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips" , AvailableQuantity = 300, SalesPrice = 1 }
+                new StockItem { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate" ,AvailableQuantity = 100, SalesPrice = 1.50f },
+                new StockItem { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", AvailableQuantity = 200, SalesPrice = 2.00f },
+                new StockItem { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips" , AvailableQuantity = 300, SalesPrice = 1.00f }
             );
         }
     }

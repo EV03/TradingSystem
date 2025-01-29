@@ -15,11 +15,12 @@ namespace Store.Grpc.Services
             public override async Task<ProductResponse> GetProductInfo(ProductRequest request, ServerCallContext context)
             {
                 var product = await _stockItemRepository.GetByBarcodeAsync(request.Barcode);
-
+                
                 if (product == null)
                 {
                     throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
                 }
+                
 
                 return new ProductResponse
                 {

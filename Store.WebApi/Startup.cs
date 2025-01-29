@@ -64,4 +64,11 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/", () => "Hello World");
 
+// Ensure the database is created and seeded with initial data
+using (var serviceScope = app.Services.CreateScope())
+{
+    var context = serviceScope.ServiceProvider.GetRequiredService<StoreContext>();
+    context.Database.EnsureCreated();
+}
+
 app.Run();
