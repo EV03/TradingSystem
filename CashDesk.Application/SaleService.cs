@@ -31,20 +31,20 @@ public class SaleService : ISaleService
         
         _sale.AddItem(new SaleItem(product.Barcode, product.Name, product.Price));
         
-        return _sale.Items.Last();
-            
+        return _sale.Items.First((item) => item.Barcode == barcode);
+
     }
 
     public long GetSaleTotal()
         
     {
-        if (_sale != null) return _sale.Total;
-        throw new InvalidOperationException("No sale in progress.");
+         return _sale.Total;
+       
     }
 
     public async Task FinishSaleAsync()
     {
-        if (_sale == null || _sale.IsEmpty()) throw new InvalidOperationException("No sale in progress.");
+        if (_sale.IsEmpty()) throw new InvalidOperationException("No sale in progress.");
         
         var transactionDto = new TransactionDto
         {

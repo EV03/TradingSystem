@@ -2,12 +2,13 @@
 
 public class Sale
 {
-    public List<SaleItem> Items { get; private set; }
-    public long Total { get; private set; }
+    public List<SaleItem> Items { get; }
+    public int Total { get; private set; }
     
     public Sale()
     {
         Items = new List<SaleItem>();
+        Total = 0; 
     }
     
     public void AddItem(SaleItem item)
@@ -21,18 +22,16 @@ public class Sale
         {
             Items.Add(item);
         }
-        CalculateTotal();
+        CalculateTotal(item.Price);
     }
 
-    private void CalculateTotal()
+    private void CalculateTotal(int itemPrice)
     {
-        Total = Items.Sum(item => item.Price * item.Quantity);
+        Total += itemPrice;
     }
     
     public bool IsEmpty()
     {
         return Items.Count == 0;
     }
-    
-
 }

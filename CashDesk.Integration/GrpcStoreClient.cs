@@ -26,7 +26,7 @@ public class GrpcStoreClient : IStoreCommunication
         {
             Name = response.Name,
             Barcode = response.Barcode,
-            Price = (int) response.Price * 100
+            Price = (int) (response.Price * 100)
         };
     }
 
