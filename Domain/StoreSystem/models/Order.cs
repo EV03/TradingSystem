@@ -1,4 +1,4 @@
-namespace Domain.StoreSystem;
+namespace Domain.StoreSystem.models;
 
 public class Order
 {

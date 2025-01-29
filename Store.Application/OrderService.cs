@@ -1,5 +1,5 @@
 using Domain.Enterprise.models;
-using Domain.StoreSystem;
+using Domain.StoreSystem.models;
 using Domain.StoreSystem.repository;
 using Shared.Contracts.Dtos;
 using Store.Application.service;
@@ -66,7 +66,7 @@ public class OrderService : IOrderService
             }
             
             orders.Add(order);
-            await _orderRepository.SaveAsync(order);
+            await _orderRepository.AddAsync(order);
         }
         return orders;
     }

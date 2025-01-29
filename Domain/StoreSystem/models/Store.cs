@@ -1,6 +1,6 @@
 using Domain.StoreSystem.models;
 
-namespace Domain.StoreSystem;
+namespace Domain.StoreSystem.models;
 
 public class Store
 {

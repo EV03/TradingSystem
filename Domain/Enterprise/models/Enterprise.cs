@@ -1,5 +1,5 @@
 using Domain.Enterprise.models;
-using Domain.StoreSystem;
+using Domain.StoreSystem.models;
 
 namespace Domain.Enterprise.Models
 {

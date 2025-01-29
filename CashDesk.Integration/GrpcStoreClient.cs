@@ -12,7 +12,7 @@ public class GrpcStoreClient : IStoreCommunication
     private readonly Product.ProductClient _productServiceClient;
     public GrpcStoreClient()
     {
-        var channel = GrpcChannel.ForAddress("https://localhost:5131"); 
+        var channel = GrpcChannel.ForAddress("http://localhost:5131"); 
         _productServiceClient = new Product.ProductClient(channel);
     }
     // grpc client stub 
