@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IStockItemRepository, StockItemRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 var app = builder.Build();

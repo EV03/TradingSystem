@@ -6,7 +6,6 @@ public class Store
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string Location { get; set; }
     
     public List<Order> Orders { get; set; } // navigation property
     public List<StockItem> StockItems { get; set; } // navigation property

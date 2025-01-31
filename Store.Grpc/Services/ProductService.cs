@@ -12,6 +12,10 @@ namespace Store.Grpc.Services
             {
                 _stockItemRepository = stockItemRepository;
             }
+            
+            // Todo: Use CachedProduct instead of StockItem 
+            // currently StockItem contains the barcode which will be removed in the future because barcode is global
+            // and should be stored in the enterprise server
             public override async Task<ProductResponse> GetProductInfo(ProductRequest request, ServerCallContext context)
             {
                 var product = await _stockItemRepository.GetByBarcodeAsync(request.Barcode);

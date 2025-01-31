@@ -2,24 +2,13 @@ using Domain.StoreSystem.models;
 
 namespace Domain.StoreSystem.repository;
 
-public interface IStockItemRepository
-{
-    Task<StockItem?> GetByIdAsync(Guid id);
+public interface IStockItemRepository {
     
+    // später rausnehmen
     Task<StockItem?> GetByBarcodeAsync(string barcode);
-    Task<StockItem?> AddAsync(StockItem stockItem);
     
-    Task<StockItem> UpdateAsync(StockItem stockItem);
+    Task<StockItem?> UpdateAsync(StockItem stockItem);
     
-    Task DeleteAsync(Guid id);
-    
-    Task<IEnumerable<StockItem>?> GetAllAsync();
-    
-    Task<StockItem?> GetByProductIdAndStoreIdAsync(Guid productId, Guid storeId);
-    
-    // get by high stock products >= min stock
-    
-    // get by low stock products < min stock
-    
+    Task<IEnumerable<StockItem>?> GetAllStocksByStoreIdAsync(Guid storeId);
     
 }

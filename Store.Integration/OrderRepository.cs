@@ -4,64 +4,32 @@ using Domain.StoreSystem.models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Store.Integration;
-
 public class OrderRepository : IOrderRepository
 {
     private readonly StoreContext _context;
 
-    public OrderRepository(StoreContext context)
-    {
-        _context = context;
-    }
-
     public async Task<Order?> GetByIdAsync(Guid id)
     {
-        return await _context.Orders.FindAsync(id);
+        return await _context.Orders.FirstOrDefaultAsync(order => order.Id == id);
     }
 
     public async Task<Order?> AddAsync(Order order)
     {
-        _context.Orders.Add(order);
+        await _context.Orders.AddAsync(order);
         await _context.SaveChangesAsync();
         return order;
     }
 
-    public async Task<OrderItem?> SaveOrderItemAsync(OrderItem orderItem)
-    {
-        _context.OrderItems.Add(orderItem);
-        await _context.SaveChangesAsync();
-        return orderItem;
-    }
-
-    public async Task<Order?> UpdateAsync(Order order)
+    public async Task<Order> UpdateAsync(Order order)
     {
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
         return order;
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<IEnumerable<Order>?> GetByStoreIdAndOrderId(Guid storeId, Guid orderId)
     {
-        var order = await _context.Orders.FindAsync(id);
-        if (order != null)
-        {
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-        }
+        return await _context.Orders.Where(order => order.StoreId == storeId && order.Id == orderId).ToListAsync();
     }
-
-    public async Task<IEnumerable<Order>?> GetAll()
-    {
-        return await _context.Orders.ToListAsync();
-    }
-
-    public async Task<IEnumerable<Order>?> GetByStoreId(Guid storeId)
-    {
-        return await _context.Orders.Where(order => order.StoreId == storeId).ToListAsync();
-    }
-
-    public async Task<IEnumerable<Order>?> GetByStoreIdAndStatus(Guid storeId, string status)
-    {
-        return await _context.Orders.Where(order => order.StoreId == storeId && order.Status == status).ToListAsync();
-    }
+    
 }

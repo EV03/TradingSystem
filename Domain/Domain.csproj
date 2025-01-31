@@ -14,9 +14,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Enterprise\repository\" />
-      <Folder Include="Enterprise\service\" />
-    </ItemGroup>
-
 </Project>

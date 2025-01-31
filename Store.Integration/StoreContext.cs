@@ -12,8 +12,8 @@ namespace Store.Integration
         }
         public DbSet<Domain.StoreSystem.models.Store> Stores { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<StockItem> StockItems { get; set; }
+        public DbSet<CachedProduct> CachedProducts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
