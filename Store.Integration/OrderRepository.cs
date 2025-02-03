@@ -27,9 +27,9 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public async Task<IEnumerable<Order>?> GetByOrderId( Guid orderId)
+    public async Task<List<Order>?> GetAllOrdersAsync()
     {
-        return await _context.Orders.Where(order => order.Id == orderId).ToListAsync();
+        return await _context.Orders.ToListAsync();
     }
 
     public async Task<OrderSupplier?> GetOrderSupplierByIdAsync(Guid orderSupplierId)

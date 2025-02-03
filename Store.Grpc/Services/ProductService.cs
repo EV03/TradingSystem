@@ -30,10 +30,6 @@ namespace Store.Grpc.Services
                         Price = product.CurrentPrice,
                     };
                 }
-                catch (FormatException e)
-                {
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid StoreId format."));
-                }
                 catch (ArgumentException e)
                 {
                     throw new RpcException(new Status(StatusCode.NotFound, e.Message));
@@ -50,7 +46,6 @@ namespace Store.Grpc.Services
                 { 
                     transactionDto.Items.Add(item.Barcode, item.Quantity);
                 }
-
                 try
                 {
                     await _stockService.UpdateStockFromSaleAsync(transactionDto);
@@ -60,9 +55,9 @@ namespace Store.Grpc.Services
                         Success = true
                     };
                 }
-                catch (FormatException e)
+                catch ( ArgumentException e)
                 {
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid StoreId format."));
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, e.Message));
                 }
             }
         }

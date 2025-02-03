@@ -6,7 +6,7 @@ namespace Store.Application.service;
 
 public interface IOrderService
 {
-    Task<List<Order>>  PlaceOrderAsync(OrderDto order); 
+    Task<Order>  PlaceOrderAsync(List<OrderProductDto>  order); 
     Task RollReceivedOrderAsync(Guid orderSupplierId);
-    Task<List<OrderSupplier>> ShowOrders(List<Guid?> orderIds);
+    Task<List<Order>?> ShowOrders(List<Guid>? orderIds);
 }  

@@ -7,9 +7,6 @@ public class CachedProduct
    public String Name { get; set; }
    public float CurrentPrice { get; set; }
    
-   public Guid StoreId { get; set; }
-   public Store Store { get; set; } // navigation property
-   
    public Guid ProductId { get; set; }
    public Guid SupplierId { get; set; } // eventuell rausnehmen 
    
