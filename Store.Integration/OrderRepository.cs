@@ -27,9 +27,26 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public async Task<IEnumerable<Order>?> GetByStoreIdAndOrderId(Guid storeId, Guid orderId)
+    public async Task<IEnumerable<Order>?> GetByOrderId( Guid orderId)
     {
-        return await _context.Orders.Where(order => order.StoreId == storeId && order.Id == orderId).ToListAsync();
+        return await _context.Orders.Where(order => order.Id == orderId).ToListAsync();
     }
-    
+
+    public async Task<OrderSupplier?> GetOrderSupplierByIdAsync(Guid orderSupplierId)
+    {
+        return await _context.OrderSuppliers.FirstOrDefaultAsync(orderSupplier => orderSupplier.Id == orderSupplierId);
+    }
+
+    public async Task<OrderSupplier?> AddOrderSupplierAsync(OrderSupplier orderSupplier)
+    {
+       await _context.OrderSuppliers.AddAsync(orderSupplier);
+       await _context.SaveChangesAsync();
+       return orderSupplier;
+    }
+
+    public Task UpdateOrderSupplierAsync(OrderSupplier orderSupplier)
+    {
+        _context.OrderSuppliers.Update(orderSupplier);
+        return _context.SaveChangesAsync();
+    }
 }

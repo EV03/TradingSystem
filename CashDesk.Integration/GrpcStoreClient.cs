@@ -18,7 +18,7 @@ public class GrpcStoreClient : IStoreCommunication
     // grpc client stub 
     public async Task<ProductDto> GetProduct(string barcode)
     {
-        var request = new ProductRequest() { Barcode = barcode };
+        var request = new ProductRequest() { Barcode = barcode, };
         
         var response = await _productServiceClient.GetProductInfoAsync(request);
         

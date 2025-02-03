@@ -29,8 +29,8 @@ public class StockItemRepository : IStockItemRepository
         return stockItem;
     }
     
-    public async Task<IEnumerable<StockItem>?> GetAllStocksByStoreIdAsync(Guid storeId)
+    public async Task<IEnumerable<StockItem>?> GetAllStocksAsync()
     {
-        return await _context.StockItems.Where(item => item.StoreId == storeId).ToListAsync();
+        return await _context.StockItems.ToListAsync();
     }
 }

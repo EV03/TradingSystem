@@ -12,6 +12,9 @@ namespace Store.Integration
         }
         public DbSet<Domain.StoreSystem.models.Store> Stores { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderSupplier> OrderSuppliers { get; set; } 
+        
+        public DbSet<OrderSupplierCachedProduct> OrderSupplierCachedProducts { get; set; }
         public DbSet<StockItem> StockItems { get; set; }
         public DbSet<CachedProduct> CachedProducts { get; set; }
 

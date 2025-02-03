@@ -15,18 +15,20 @@ public class ProductRepository : IProductRepository
         return await _context.CachedProducts.FirstOrDefaultAsync(product => product.Id == id);
     }
 
-    public async Task<CachedProduct?> GetByBarcodeAsync(string barcode, Guid storeId)
+    public Task<CachedProduct?> GetByBarcodeAsync(string barcode)
     {
-        return await _context.CachedProducts.FirstOrDefaultAsync(product => product.Barcode == barcode && product.StoreId == storeId);
+        return _context.CachedProducts.FirstOrDefaultAsync(product => product.Barcode == barcode);
+    }
+    
+    public async Task<CachedProduct?> Update(CachedProduct product)
+    {
+        _context.CachedProducts.Update(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public async Task UpdatePriceAsync(Guid stockItemId, float newPrice)
-    { 
-        var stockItem = await _context.StockItems.FirstOrDefaultAsync(stockItem => stockItem.Id == stockItemId);
-        if (stockItem != null)
-        {
-            stockItem.SalesPrice = newPrice;
-            await _context.SaveChangesAsync();
-        }
+    public async Task<List<CachedProduct>> GetProductsAsync()
+    {
+        return await _context.CachedProducts.ToListAsync();
     }
 }

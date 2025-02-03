@@ -1,59 +1,69 @@
 ﻿using Domain.StoreSystem.repository;
 using Grpc.Core;
+using Shared.Contracts.Dtos;
 using Shared.Contracts.Protos;
+using Store.Application.service;
 
 namespace Store.Grpc.Services
 {
     public class ProductService : Product.ProductBase
     {
-            private readonly IStockItemRepository _stockItemRepository;
+            private readonly IProductService  _productService;
+            private readonly IStockService _stockService;
 
-            public ProductService(IStockItemRepository stockItemRepository)
+            public ProductService(IProductService productService, IStockService stockItemService)
             {
-                _stockItemRepository = stockItemRepository;
+                _productService = productService;
+                _stockService = stockItemService;
             }
-            
-            // Todo: Use CachedProduct instead of StockItem 
-            // currently StockItem contains the barcode which will be removed in the future because barcode is global
-            // and should be stored in the enterprise server
+        
             public override async Task<ProductResponse> GetProductInfo(ProductRequest request, ServerCallContext context)
             {
-                var product = await _stockItemRepository.GetByBarcodeAsync(request.Barcode);
-                
-                if (product == null)
+                try
                 {
-                    throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
+                    var product = await _productService.ShowProductDetails(request.Barcode);
+                    
+                    return new ProductResponse
+                    {
+                        Name = product.Name,
+                        Barcode = product.Barcode,
+                        Price = product.CurrentPrice,
+                    };
                 }
-                
-
-                return new ProductResponse
+                catch (FormatException e)
                 {
-                    Name = product.Name,
-                    Barcode = product.Barcode,
-                    Price = product.SalesPrice,
-                };
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid StoreId format."));
+                }
+                catch (ArgumentException e)
+                {
+                    throw new RpcException(new Status(StatusCode.NotFound, e.Message));
+                }
             }
             
             public override async Task<UpdateInventoryResponse> UpdateInventory(UpdateInventoryRequest request, ServerCallContext context)
             {
-
-                foreach (var item in request.Items)
+                var transactionDto = new TransactionDto
                 {
-                    var product = await _stockItemRepository.GetByBarcodeAsync(item.Barcode);
-
-                    if (product == null)
-                    {
-                        throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
-                    }
-
-                    product.AvailableQuantity -=  item.Quantity;
-                    await _stockItemRepository.UpdateAsync(product);
+                    Items = new Dictionary<string, int>()
+                };
+                foreach (var item in request.Items)
+                { 
+                    transactionDto.Items.Add(item.Barcode, item.Quantity);
                 }
 
-                return new UpdateInventoryResponse
+                try
                 {
-                    Success = true
-                };
+                    await _stockService.UpdateStockFromSaleAsync(transactionDto);
+
+                    return new UpdateInventoryResponse
+                    {
+                        Success = true
+                    };
+                }
+                catch (FormatException e)
+                {
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid StoreId format."));
+                }
             }
         }
 }

@@ -17,17 +17,23 @@ public class OrderService : IOrderService
         _stockService = stockItemRepository;
     }
     
-    public Task<List<Order>> PlaceOrderAsync(OrderDto order, Guid storeId)
+    public Task<List<Order>> PlaceOrderAsync(OrderDto order)
     {
         throw new NotImplementedException();
     }
     
-    public Task RollReceivedOrderAsync(Guid orderSupplierId)
+    public async Task RollReceivedOrderAsync(Guid orderSupplierId)
     {
-        throw new NotImplementedException();
+        var orderSupplier = await _orderRepository.GetOrderSupplierByIdAsync(orderSupplierId);
+        if(orderSupplier == null)
+        {
+            throw new Exception("Order supplier not found");
+        }
+        orderSupplier.DeliveryDate = DateTime.Now;
+        await _stockService.UpdateStockFromOrderAsync(orderSupplier, false);
     }
 
-    public Task<List<Order>> ShowOrders(Guid storeId, List<Guid?> orderIds)
+    public Task<List<OrderSupplier>> ShowOrders(List<Guid?> orderIds)
     {
         throw new NotImplementedException();
     }

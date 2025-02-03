@@ -4,6 +4,7 @@ public class OrderSupplierCachedProduct
 {
     public Guid Id { get; set; }
     public Guid SupplierId { get; set; }
+    public int Quantity { get; set; }
     
     public Guid OrderSupplierId { get; set; }
     public OrderSupplier OrderSupplier { get; set; }

@@ -5,7 +5,7 @@ public class CachedProduct
    public Guid Id { get; set; }
    public String Barcode { get; set; }
    public String Name { get; set; }
-   public float Currentprice { get; set; }
+   public float CurrentPrice { get; set; }
    
    public Guid StoreId { get; set; }
    public Store Store { get; set; } // navigation property

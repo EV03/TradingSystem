@@ -14,6 +14,4 @@ public class StockItem
     
     public Guid CachedProductId { get; set; }
     public CachedProduct CachedProduct { get; set; } // navigation property
-    public Guid StoreId { get; set; }
-    public Store Store { get; set; } // navigation property
 }

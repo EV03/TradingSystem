@@ -1,4 +1,5 @@
-﻿using Domain.StoreSystem.repository;
+﻿using Domain.StoreSystem.models;
+using Domain.StoreSystem.repository;
 using Store.Application.service;
 
 namespace Store.Application;
@@ -6,14 +7,43 @@ namespace Store.Application;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
-    
+
     public ProductService(IProductRepository productRepository)
     {
         _productRepository = productRepository;
     }
     
-    public Task UpdatePrice(Guid stockItemId, decimal newPrice)
+    public async Task<CachedProduct> ChangePrice(Guid cachedProductId, float newPrice)
     {
-        throw new NotImplementedException();
+        var product = await _productRepository.GetByIdAsync(cachedProductId);
+        if (product == null)
+        {
+            throw new ArgumentException("Product not found");
+        }
+        product.CurrentPrice = newPrice; 
+        await _productRepository.Update(product);
+        return product;
     }
-}
+
+    public async Task<List<CachedProduct>> ShowAllProductsAsync()
+    {
+        var products = await _productRepository.GetProductsAsync();
+        if (products == null)
+        {
+            throw new ArgumentException("No products found for the given store");
+        }
+       return products.ToList()!;
+    }
+
+    public async  Task<CachedProduct> ShowProductDetails(string barcode)
+    {
+        var product = await _productRepository.GetByBarcodeAsync(barcode);
+                
+        if (product == null)
+        {
+            throw new ArgumentException("Product not found");
+        }
+        return product;
+    }
+    
+} 

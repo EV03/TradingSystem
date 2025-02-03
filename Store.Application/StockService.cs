@@ -1,4 +1,5 @@
-﻿using Domain.StoreSystem.repository;
+﻿using Domain.StoreSystem.models;
+using Domain.StoreSystem.repository;
 using Shared.Contracts.Dtos;
 using Store.Application.service;
 
@@ -7,23 +8,67 @@ namespace Store.Application;
 public class StockService : IStockService
 {
     private readonly IStockItemRepository _stockItemRepository;
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
     
-    public StockService(IStockItemRepository stockItemRepository)
+    public StockService(IStockItemRepository stockItemRepository, IOrderRepository orderRepository,IProductRepository productRepository)
     {
         _stockItemRepository = stockItemRepository;
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;    
+        
     }
-    public Task<List<StockDto>> GetStockReportAsync(Guid storeId)
+    public async  Task<List<StockItem>> GetStockReportAsync()
     {
-     throw new NotImplementedException();
+        var stockItems = await _stockItemRepository.GetAllStocksAsync();
+        if(stockItems == null)
+        {
+            throw new Exception("No stock items found");
+        }  
+
+        return stockItems.ToList();
     }
 
-    public Task UpdateStockFromSaleAsync(List<OrderItemDto> orderItems)
-    {
-        throw new NotImplementedException();
+    public async Task UpdateStockFromSaleAsync(TransactionDto saleItems)
+    { 
+        foreach (var saleItem in saleItems.Items)
+        {
+            var product = await _productRepository.GetByBarcodeAsync(saleItem.Key);
+            if(product == null)
+            {
+                throw new Exception("Product not found");
+            }
+            var stockItem = await _stockItemRepository.GetByIdAsync(product.StockItem.Id);
+            if(stockItem == null)
+            {
+                throw new Exception("Stock item not found");
+            }
+            stockItem.AvailableQuantity -= saleItem.Value;
+            await _stockItemRepository.UpdateAsync(stockItem);
+        }
     }
 
-    public Task UpdateStockFromOrderAsync(Guid orderSupplierIds)
+    public async Task UpdateStockFromOrderAsync(OrderSupplier orderSupplier, bool isIncoming)
     {
-        throw new NotImplementedException();
+         foreach (var orderSupplierProduct in orderSupplier.OrderSupplierProducts)
+         { 
+             var stockItem = await _stockItemRepository.GetByBarcodeAsync(orderSupplierProduct.CachedProduct.Barcode);
+             if(stockItem == null)
+             {
+                    throw new Exception("Stock item not found");
+             }
+             
+             if(isIncoming)
+             {
+                    stockItem.IncomingQuantity += orderSupplierProduct.Quantity;
+             }
+             else
+             {
+                    stockItem.AvailableQuantity += orderSupplierProduct.Quantity;
+                    stockItem.IncomingQuantity -= orderSupplierProduct.Quantity;
+             }
+             
+             await _stockItemRepository.UpdateAsync(stockItem);
+         }
     }
 }

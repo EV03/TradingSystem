@@ -4,11 +4,12 @@ namespace Domain.StoreSystem.repository;
 
 public interface IStockItemRepository {
     
-    // später rausnehmen
     Task<StockItem?> GetByBarcodeAsync(string barcode);
+    
+    Task<StockItem?> GetByIdAsync(Guid id);
     
     Task<StockItem?> UpdateAsync(StockItem stockItem);
     
-    Task<IEnumerable<StockItem>?> GetAllStocksByStoreIdAsync(Guid storeId);
+    Task<IEnumerable<StockItem>?> GetAllStocksAsync();
     
 }
