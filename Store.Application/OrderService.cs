@@ -2,6 +2,7 @@ using System.Runtime.InteropServices.JavaScript;
 using Domain.Enterprise.models;
 using Domain.StoreSystem.models;
 using Domain.StoreSystem.repository;
+using Domain.StoreSystem.ValueObjects;
 using Shared.Contracts.Dtos;
 using Store.Application.service;
 
@@ -21,7 +22,7 @@ public class OrderService : IOrderService
         _productRepository = productRepository;
     }
 
-    public async Task<Order> PlaceOrderAsync(List<OrderProductDto> orderProductDto)
+    public async Task<Order> PlaceOrderAsync(List<OrderProduct> orderProducts)
     {
         var order = new Order
         {
@@ -31,7 +32,7 @@ public class OrderService : IOrderService
         // mapped ein supplier zu einem orderSupplier 
         var supplierToOrderSupplierMap = new Dictionary<Guid, Guid>();
 
-        foreach (var orderProduct in orderProductDto)
+        foreach (var orderProduct in orderProducts)
         {
             var product = await _productRepository.GetByProductIdAsync(orderProduct.ProductId);
             if (product == null)

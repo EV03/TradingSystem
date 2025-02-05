@@ -1,26 +1,31 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Dtos;
 using Store.Application.service;
 
 namespace Store.WebApi;
 
 [ApiController]
-[Route("api/contoller")]
+[Route("api/controller")]
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
+    private readonly IMapper _mapper;
 
-    public ProductController(IProductService productService)
+    public ProductController(IProductService productService, IMapper mapper)
     {
         _productService = productService;
+        _mapper = mapper;
     }
 
     [HttpPatch("change-price")]
-    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid cachedProductId, [FromQuery] float newPrice)
+    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromQuery] float newPrice)
     {
         try
         {
-            var product = await _productService.ChangePrice(cachedProductId, newPrice);
-            return Ok(product);
+            var product = await _productService.ChangePrice(productId, newPrice);
+            var productDto = _mapper.Map<ProductDto>(product);
+            return Ok(productDto);
         }
         catch (Exception e)
         {
@@ -34,7 +39,8 @@ public class ProductController : ControllerBase
         try
         {
             var products = await _productService.ShowAllProductsAsync();
-            return Ok(products);
+            var productDtos = _mapper.Map<List<ProductDto>>(products);
+            return Ok(productDtos);
         }
         catch (Exception e)
         {

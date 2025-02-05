@@ -1,3 +1,5 @@
+using AutoMapper;
+using Domain.StoreSystem.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts.Dtos;
 using Store.Application.service;
@@ -5,14 +7,16 @@ using Store.Application.service;
 namespace Store.WebApi;
 
 [ApiController]
-[Route("api/contoller")]
+[Route("api/controller")]
 public class OrderController : ControllerBase 
 {
     private readonly IOrderService _orderService;
+    private readonly IMapper _mapper;
     
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService orderService, IMapper mapper)
     {
         _orderService = orderService;
+        _mapper = mapper;
     }
     
     [HttpPost("place-order")]
@@ -20,7 +24,7 @@ public class OrderController : ControllerBase
     {
         try
         {
-            var order = await _orderService.PlaceOrderAsync(orderProductDto);
+            var order = await _orderService.PlaceOrderAsync(_mapper.Map<List<OrderProduct>>(orderProductDto));
             return Ok(order);
         }
         catch (Exception e)

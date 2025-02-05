@@ -2,6 +2,7 @@
 using Domain.StoreSystem;
 using Domain.StoreSystem.repository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Shared.Contracts.Mapping;
 using Store.Grpc.Services;
 using Store.Integration;
 
@@ -29,6 +30,8 @@ builder.Services.AddDbContext<StoreContext>(options =>
 builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IStockItemRepository, StockItemRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
