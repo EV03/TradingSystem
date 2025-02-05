@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Enterprise.ValueObjects;
 using Domain.StoreSystem;
 using Domain.StoreSystem.models;
 using Domain.StoreSystem.ValueObjects;
@@ -26,5 +27,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.AvailableQuantity, opt => opt.MapFrom(src => src.StockItem.AvailableQuantity))
             .ForMember(dest => dest.IncomingQuantity, opt => opt.MapFrom(src => src.StockItem.IncomingQuantity));
+        
+        CreateMap<SupplierDeliveryTime, SupplierDeliveryTimeDto>()
+            .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.SupplierName))
+            .ForMember(dest => dest.AverageDeliveryTime, opt => opt.MapFrom(src => src.AverageDeliveryTime));
     }
 }
