@@ -10,9 +10,9 @@ public class ProductRepository : IProductRepository
 {
     private readonly StoreContext _context;
 
-    public async Task<CachedProduct?> GetByIdAsync(Guid id)
+    public async Task<CachedProduct?> GetByProductIdAsync(Guid id)
     {
-        return await _context.CachedProducts.FirstOrDefaultAsync(product => product.Id == id);
+        return await _context.CachedProducts.FirstOrDefaultAsync(product => product.ProductId == id);
     }
 
     public Task<CachedProduct?> GetByBarcodeAsync(string barcode)

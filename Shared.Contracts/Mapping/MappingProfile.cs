@@ -8,8 +8,4 @@ namespace Shared.Contracts.Mapping;
 public class MappingProfile : Profile
 
 {
-    public  MappingProfile()
-    {
-       
-    }
 }

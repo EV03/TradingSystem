@@ -15,7 +15,7 @@ public class ProductService : IProductService
     
     public async Task<CachedProduct> ChangePrice(Guid cachedProductId, float newPrice)
     {
-        var product = await _productRepository.GetByIdAsync(cachedProductId);
+        var product = await _productRepository.GetByProductIdAsync(cachedProductId);
         if (product == null)
         {
             throw new ArgumentException("Product not found");

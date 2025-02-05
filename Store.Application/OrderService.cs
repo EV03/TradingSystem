@@ -33,7 +33,7 @@ public class OrderService : IOrderService
 
         foreach (var orderProduct in orderProductDto)
         {
-            var product = await _productRepository.GetByIdAsync(orderProduct.ProductId);
+            var product = await _productRepository.GetByProductIdAsync(orderProduct.ProductId);
             if (product == null)
             {
                 throw new Exception("Product not found");
