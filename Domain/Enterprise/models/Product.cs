@@ -14,6 +14,5 @@ public class Product
     
     public static Guid SupplierId { get; set; }
     public Supplier Supplier { get; set; } // navigation property
-    public List<StockItem> StockItems { get; set; } // navigation property
     
 }

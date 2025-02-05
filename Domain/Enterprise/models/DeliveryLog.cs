@@ -2,7 +2,10 @@
 
 public class DeliveryLog
 {
-    Guid SupplierId { get; set; }
-    DateTime OrderDate { get; set; }
-    DateTime DeliveryDate { get; set; }
+    public Guid EnterpriseId { get; set; }  
+    
+    public  String SupplierName { get; set; }
+    public Guid SupplierId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public DateTime DeliveryDate { get; set; }
 } 

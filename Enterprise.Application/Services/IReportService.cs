@@ -1,6 +1,8 @@
-﻿namespace Enterprise.Application.Services;
+﻿using Domain.Enterprise.ValueObjects;
+
+namespace Enterprise.Application.Services;
 
 public interface IReportService
 {
-    
+    Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes(Guid enterpriseId);
 }
