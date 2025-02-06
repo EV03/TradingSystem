@@ -16,11 +16,6 @@ public class StockItemRepository : IStockItemRepository
     {
         return await _context.StockItems.FirstOrDefaultAsync(item => item.Id == id);
     }
-    // später rausnehmen
-    public async Task<StockItem?> GetByBarcodeAsync(string barcode)
-    {
-        return await _context.StockItems.FirstOrDefaultAsync(item => item.Barcode == barcode);
-    }
 
     public async Task<StockItem?> UpdateAsync(StockItem stockItem)
     {

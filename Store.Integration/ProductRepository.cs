@@ -9,15 +9,24 @@ namespace Store.Integration;
 public class ProductRepository : IProductRepository
 {
     private readonly StoreContext _context;
+    
+    public ProductRepository(StoreContext context)
+    {
+        _context = context;
+    }
 
     public async Task<CachedProduct?> GetByProductIdAsync(Guid id)
     {
-        return await _context.CachedProducts.FirstOrDefaultAsync(product => product.ProductId == id);
+        return await _context.CachedProducts
+            .Include(product => product.StockItem)
+            .FirstOrDefaultAsync(product => product.ProductId == id);
     }
 
     public Task<CachedProduct?> GetByBarcodeAsync(string barcode)
     {
-        return _context.CachedProducts.FirstOrDefaultAsync(product => product.Barcode == barcode);
+        return _context.CachedProducts
+            .Include(product => product.StockItem)
+            .FirstOrDefaultAsync(product => product.Barcode == barcode);
     }
     
     public async Task<CachedProduct?> Update(CachedProduct product)

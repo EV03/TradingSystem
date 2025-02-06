@@ -8,13 +8,11 @@ namespace Store.Application;
 public class StockService : IStockService
 {
     private readonly IStockItemRepository _stockItemRepository;
-    private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     
-    public StockService(IStockItemRepository stockItemRepository, IOrderRepository orderRepository,IProductRepository productRepository)
+    public StockService(IStockItemRepository stockItemRepository,IProductRepository productRepository)
     {
         _stockItemRepository = stockItemRepository;
-        _orderRepository = orderRepository;
         _productRepository = productRepository;    
         
     }
@@ -52,7 +50,13 @@ public class StockService : IStockService
     {
          foreach (var orderSupplierProduct in orderSupplier.OrderSupplierProducts)
          { 
-             var stockItem = await _stockItemRepository.GetByBarcodeAsync(orderSupplierProduct.CachedProduct.Barcode);
+             var product = await _productRepository.GetByProductIdAsync(orderSupplierProduct.CachedProduct.ProductId);
+             if(product == null)
+             {
+                    throw new Exception("Product not found");
+             }
+                
+             var stockItem = await _stockItemRepository.GetByIdAsync(product.StockItem.Id);
              if(stockItem == null)
              {
                     throw new Exception("Stock item not found");

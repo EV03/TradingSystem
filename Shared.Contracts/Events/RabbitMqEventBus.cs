@@ -16,6 +16,7 @@ public class RabbitMqEventBus : IEventBus
     public RabbitMqEventBus(IServiceProvider serviceProvider)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
+        
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _serviceProvider = serviceProvider;

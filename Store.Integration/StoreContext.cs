@@ -22,15 +22,51 @@ namespace Store.Integration
         {
             optionsBuilder.UseInMemoryDatabase("StoreSystem");
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Seed data 
-            modelBuilder.Entity<StockItem>().HasData(
-                new StockItem { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate" ,AvailableQuantity = 100, SalesPrice = 1.50f },
-                new StockItem { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", AvailableQuantity = 200, SalesPrice = 2.00f },
-                new StockItem { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips" , AvailableQuantity = 300, SalesPrice = 1.00f }
+
+            var chocolateProduct = new CachedProduct()
+                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50f };
+            var cookiesProduct = new CachedProduct
+                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00f };
+            var chipsProduct = new CachedProduct
+                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00f };
+
+            var chocolateStockItem = new StockItem()
+            {
+                Id = Guid.NewGuid(), Name = "Chocolate", AvailableQuantity = 100,
+                CachedProductId = chocolateProduct.Id
+            };
+            var cookiesStockItem = new StockItem()
+            {
+                Id = Guid.NewGuid(), Name = "Cookies", AvailableQuantity = 100,
+                CachedProductId = cookiesProduct.Id
+            };
+            var chipsStockItem = new StockItem()
+            {
+                Id = Guid.NewGuid(), Name = "Chips", AvailableQuantity = 100,
+                CachedProductId = chipsProduct.Id
+            };
+
+            // Seed CachedProduct data
+            modelBuilder.Entity<CachedProduct>().HasData(
+                chocolateProduct,
+                cookiesProduct,
+                chipsProduct
             );
+
+            // Seed StockItem data
+            modelBuilder.Entity<StockItem>().HasData(
+                chocolateStockItem,
+                cookiesStockItem,
+                chipsStockItem
+            );
+            
+            modelBuilder.Entity<CachedProduct>()
+                .HasOne(cp => cp.StockItem)
+                .WithOne(si => si.CachedProduct)
+                .HasForeignKey<StockItem>(si => si.CachedProductId);
         }
     }
 }

@@ -4,8 +4,10 @@ using Domain.StoreSystem.repository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Shared.Contracts.Events;
 using Shared.Contracts.Mapping;
-using Store.Grpc.Services;
+using Store.Application;
+using Store.Application.service;
 using Store.Integration;
+using ProductService = Store.Grpc.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IStockItemRepository, StockItemRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, Store.Application.ProductService>();
+builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
 
