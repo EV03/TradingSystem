@@ -1,6 +1,6 @@
 ﻿namespace Shared.Contracts.Events;
 
-public interface IEventHandler<in TEvent> where TEvent : class
+public interface IEventHandler<in TEvent> 
 {
     Task HandleAsync(TEvent @event);
 }

@@ -3,6 +3,7 @@ using Enterprise.Application;
 using Enterprise.Application.Services;
 using Enterprise.Integration;
 using Microsoft.EntityFrameworkCore;
+using Shared.Contracts.Events;
 using Shared.Contracts.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,9 @@ builder.Services.AddDbContext<EnterpriseContext>(options =>
 
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
+builder.Services.AddTransient<IEventHandler<LowStockEvent>, LowStockEventHandler>();
 
 var app = builder.Build();
 
@@ -41,5 +45,9 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<EnterpriseContext>();
     context.Database.EnsureCreated();
+    
+    // subscribe to events
+    var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
+    await eventBus.SubscribeAsync<LowStockEvent, LowStockEventHandler>();
 }
 app.Run();

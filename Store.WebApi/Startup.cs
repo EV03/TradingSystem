@@ -2,6 +2,7 @@
 using Domain.StoreSystem;
 using Domain.StoreSystem.repository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Shared.Contracts.Events;
 using Shared.Contracts.Mapping;
 using Store.Grpc.Services;
 using Store.Integration;
@@ -37,6 +38,7 @@ builder.Services.AddScoped<IStockItemRepository, StockItemRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
 
 var app = builder.Build();
 
@@ -72,6 +74,8 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<StoreContext>();
     context.Database.EnsureCreated();
+    
+    var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
 }
 
 app.Run();
