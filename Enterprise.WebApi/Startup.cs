@@ -7,7 +7,6 @@ using Shared.Contracts.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,12 +16,6 @@ builder.Services.AddDbContext<EnterpriseContext>(options =>
 
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
-
-
-
-
-
-
 
 var app = builder.Build();
 
@@ -34,6 +27,19 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
+app.MapGet("/", () => "Hello World");
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var context = serviceScope.ServiceProvider.GetRequiredService<EnterpriseContext>();
+    context.Database.EnsureCreated();
+}
 app.Run();

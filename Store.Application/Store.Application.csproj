@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EventBus\EventBus.csproj" />
       <ProjectReference Include="..\Shared.Contracts\Shared.Contracts.csproj" />
       <ProjectReference Include="..\Store.Integration\Store.Integration.csproj" />
     </ItemGroup>
