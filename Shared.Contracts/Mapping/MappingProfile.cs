@@ -22,11 +22,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.CurrentPrice))
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
         
-        CreateMap<CachedProduct, StockDto>()
-            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+        CreateMap<StockItem, StockDto>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.CachedProductId))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.AvailableQuantity, opt => opt.MapFrom(src => src.StockItem.AvailableQuantity))
-            .ForMember(dest => dest.IncomingQuantity, opt => opt.MapFrom(src => src.StockItem.IncomingQuantity));
+            .ForMember(dest => dest.AvailableQuantity, opt => opt.MapFrom(src => src.AvailableQuantity))
+            .ForMember(dest => dest.IncomingQuantity, opt => opt.MapFrom(src => src.IncomingQuantity));
         
         CreateMap<SupplierDeliveryTime, SupplierDeliveryTimeDto>()
             .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.SupplierName))
