@@ -6,7 +6,7 @@ using Store.Application.service;
 namespace Store.WebApi;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/stocks")]
 public class StockController : ControllerBase
 {
     private readonly IStockService _stockService;
@@ -25,11 +25,14 @@ public class StockController : ControllerBase
         {
             var stock = await _stockService.GetStockReportAsync();
             var stockDto = _mapper.Map<List<StockDto>>(stock);
+            Console.WriteLine("Stock report generated");
             return Ok(stockDto);
         }
         catch (Exception e)
         {
+            Console.WriteLine(e.Message);
             return BadRequest(e.Message);
+            
         }
     }
 }

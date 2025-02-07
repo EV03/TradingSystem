@@ -98,7 +98,7 @@ public class OrderService : IOrderService
     {
         if (orderIds == null || !orderIds.Any())
         {
-            // Retrieve all orders
+            // Retrieve all order
             return await _orderRepository.GetAllOrdersAsync();
         }
 

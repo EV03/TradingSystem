@@ -20,7 +20,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPost("place-order")]
-    public async Task<IActionResult> PlaceOrderAsync(List<OrderProductDto> orderProductDto)
+    public async Task<IActionResult> PlaceOrderAsync( [FromBody] List<OrderProductDto> orderProductDto)
     {
         try
         {

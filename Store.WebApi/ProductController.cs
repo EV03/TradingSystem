@@ -6,7 +6,7 @@ using Store.Application.service;
 namespace Store.WebApi;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/products")]
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -19,7 +19,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPatch("change-price")]
-    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromQuery] float newPrice)
+    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromBody] float newPrice)
     {
         try
         {

@@ -2,6 +2,7 @@
 
 public class DeliveryLog
 {
+    public Guid Id { get; set; }
     public Guid EnterpriseId { get; set; }  
     
     public  String SupplierName { get; set; }

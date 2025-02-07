@@ -1,0 +1,11 @@
+﻿
+<div>
+  <h2>Stock Items</h2>
+  <ul>
+    <li *ngFor="let item of stockItems">
+      {{ item.name }} - Available: {{ item.availableStock }}
+      <input type="number" [(ngModel)]="item.orderAmount" placeholder="Enter amount" />
+      <button (click)="orderStockItem(item, item.orderAmount)">Order</button>
+    </li>
+  </ul>
+</div>
