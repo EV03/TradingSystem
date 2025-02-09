@@ -11,5 +11,7 @@ public class CachedProduct
    public Guid SupplierId { get; set; } // eventuell rausnehmen 
    
    public StockItem StockItem { get; set; } // navigation property
+   
+   public List<OrderSupplierCachedProduct> OrderSupplierProducts { get; set; } // navigation property
     
 }

@@ -7,6 +7,11 @@ namespace Store.Integration;
 public class OrderRepository : IOrderRepository
 {
     private readonly StoreContext _context;
+    
+    public OrderRepository(StoreContext context)
+    {
+        _context = context;
+    }
 
     public async Task<Order?> GetByIdAsync(Guid id)
     {

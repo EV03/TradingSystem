@@ -25,8 +25,9 @@ public class OrderController : ControllerBase
         try
         {
             var order = await _orderService.PlaceOrderAsync(_mapper.Map<List<OrderProduct>>(orderProductDto));
+            var orderDto  = _mapper.Map<OrderDto>(order);
             Console.WriteLine("Order placed");
-            return Ok(order);
+            return Ok(orderDto);
         }
         catch (Exception e)
         {

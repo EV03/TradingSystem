@@ -10,4 +10,6 @@ public interface IStockItemRepository {
     
     Task<IEnumerable<StockItem>?> GetAllStocksAsync();
     
+    Task<StockItem?> GetByCachedProductIdAsync(Guid cachedProductId);
+    
 }

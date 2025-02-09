@@ -24,7 +24,9 @@ public class ProductRepository : IProductRepository
 
     public Task<CachedProduct?> GetByIdAsync(Guid id)
     {
+     
         return _context.CachedProducts
+            .AsNoTracking()
             .Include(product => product.StockItem)
             .FirstOrDefaultAsync(product => product.Id == id);
     }

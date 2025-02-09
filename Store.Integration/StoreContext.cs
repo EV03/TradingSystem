@@ -67,6 +67,25 @@ namespace Store.Integration
                 .HasOne(cp => cp.StockItem)
                 .WithOne(si => si.CachedProduct)
                 .HasForeignKey<StockItem>(si => si.CachedProductId);
+            
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderSupplier)
+                .WithOne(os => os.Order)
+                .HasForeignKey(os => os.OrderId);
+         
+            modelBuilder.Entity<OrderSupplierCachedProduct>()
+                .HasKey(osp => new { osp.OrderSupplierId, osp.CachedProductId });
+
+            modelBuilder.Entity<OrderSupplierCachedProduct>()
+                .HasOne(osp => osp.OrderSupplier)
+                .WithMany(os => os.OrderSupplierProducts)
+                .HasForeignKey(osp => osp.OrderSupplierId);
+
+            modelBuilder.Entity<OrderSupplierCachedProduct>()
+                .HasOne(osp => osp.CachedProduct)
+                .WithMany(cp => cp.OrderSupplierProducts)
+                .HasForeignKey(osp => osp.CachedProductId);
+            
         }
     }
 }
