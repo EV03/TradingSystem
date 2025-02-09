@@ -1,11 +1,63 @@
-﻿
-<div>
-  <h2>Stock Items</h2>
-  <ul>
-    <li *ngFor="let item of stockItems">
-      {{ item.name }} - Available: {{ item.availableStock }}
-      <input type="number" [(ngModel)]="item.orderAmount" placeholder="Enter amount" />
-      <button (click)="orderStockItem(item, item.orderAmount)">Order</button>
-    </li>
-  </ul>
+﻿<div>
+  <h2>Low Stock Items</h2>
+  <div *ngIf="lowStockItems.length > 0">
+    <table border="1" style="border-collapse: collapse;">
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Available Quantity</th>
+        <th>Incoming Quantity</th>
+        <th>Outgoing Quantity</th>
+        <th>Order Quantity</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of lowStockItems">
+        <td>{{ item.name }}</td>
+        <td>{{ item.availableQuantity }}</td>
+        <td>{{ item.incomingQuantity }}</td>
+        <td>{{ item.outGoingQuantity }}</td>
+        <td>
+          <input [(ngModel)]="item.orderQuantity" type="number" min="1" />
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="lowStockItems.length === 0">
+    No low stock items available.
+  </div>
+
+  <h2>All Stock Items</h2>
+  <div *ngIf="stockItems.length > 0">
+    <table border="1" style="border-collapse: collapse;">
+      <thead>
+      <tr>
+        <th>Product</th>
+        <th>Available Quantity</th>
+        <th>Incoming Quantity</th>
+        <th>Outgoing Quantity</th>
+        <th>Order Quantity</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of stockItems">
+        <td>{{ item.name }}</td>
+        <td>{{ item.availableQuantity }}</td>
+        <td>{{ item.incomingQuantity }}</td>
+        <td>{{ item.outGoingQuantity }}</td>
+        <td>
+          <input [(ngModel)]="item.orderQuantity" type="number" min="1" />
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="stockItems.length === 0">
+    No stock items available.
+  </div>
+
+  <div class="order-button-container">
+    <button (click)="orderAllStockItems()">Order All</button>
+  </div>
 </div>

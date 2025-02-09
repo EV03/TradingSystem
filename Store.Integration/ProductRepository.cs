@@ -15,11 +15,18 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<CachedProduct?> GetByProductIdAsync(Guid id)
+    public async Task<CachedProduct?> GetByProductIdAsync(Guid productId)
     {
         return await _context.CachedProducts
             .Include(product => product.StockItem)
-            .FirstOrDefaultAsync(product => product.ProductId == id);
+            .FirstOrDefaultAsync(product => product.ProductId == productId);
+    }
+
+    public Task<CachedProduct?> GetByIdAsync(Guid id)
+    {
+        return _context.CachedProducts
+            .Include(product => product.StockItem)
+            .FirstOrDefaultAsync(product => product.Id == id);
     }
 
     public Task<CachedProduct?> GetByBarcodeAsync(string barcode)

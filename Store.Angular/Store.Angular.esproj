@@ -8,7 +8,6 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\Store.Angular\browser\</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\app\components\models\" />
     <Folder Include="src\app\components\security\" />
     <Folder Include="src\app\components\shared\" />
   </ItemGroup>
