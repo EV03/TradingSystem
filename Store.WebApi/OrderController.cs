@@ -7,7 +7,7 @@ using Store.Application.service;
 namespace Store.WebApi;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/orders")]
 public class OrderController : ControllerBase 
 {
     private readonly IOrderService _orderService;
@@ -25,10 +25,12 @@ public class OrderController : ControllerBase
         try
         {
             var order = await _orderService.PlaceOrderAsync(_mapper.Map<List<OrderProduct>>(orderProductDto));
+            Console.WriteLine("Order placed");
             return Ok(order);
         }
         catch (Exception e)
         {
+            Console.WriteLine("Order not placed");
             return BadRequest(e.Message);
         }
     }
@@ -53,10 +55,12 @@ public class OrderController : ControllerBase
         try
         {
             await _orderService.RollReceivedOrderAsync(orderSupplierId);
+            Console.WriteLine("Order received");
             return Ok();
         }
         catch (Exception e)
         {
+            Console.WriteLine("Order not received");
             return BadRequest(e.Message);
         }
     }

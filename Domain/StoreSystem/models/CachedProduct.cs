@@ -5,7 +5,7 @@ public class CachedProduct
    public Guid Id { get; set; }
    public String Barcode { get; set; }
    public String Name { get; set; }
-   public float CurrentPrice { get; set; }
+   public double CurrentPrice { get; set; }
    
    public Guid ProductId { get; set; }
    public Guid SupplierId { get; set; } // eventuell rausnehmen 

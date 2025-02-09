@@ -19,13 +19,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpPatch("change-price")]
-    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromBody] float newPrice)
+    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromBody] double newPrice)
     {
         try
         {
+            Console.WriteLine("Changing price");
             var product = await _productService.ChangePrice(productId, newPrice);
             var productDto = _mapper.Map<ProductDto>(product);
-            return Ok(productDto);
+            Console.WriteLine("Price changed");
+             return Ok(productDto);
         }
         catch (Exception e)
         {
@@ -40,6 +42,7 @@ public class ProductController : ControllerBase
         {
             var products = await _productService.ShowAllProductsAsync();
             var productDtos = _mapper.Map<List<ProductDto>>(products);
+            Console.WriteLine("Products retrieved");
             return Ok(productDtos);
         }
         catch (Exception e)

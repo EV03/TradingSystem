@@ -27,26 +27,26 @@ namespace Store.Integration
         {
 
             var chocolateProduct = new CachedProduct()
-                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50f };
+                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50, ProductId = Guid.NewGuid() };
             var cookiesProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00f };
+                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = Guid.NewGuid() };
             var chipsProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00f };
+                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = Guid.NewGuid() };
 
             var chocolateStockItem = new StockItem()
             {
                 Id = Guid.NewGuid(), Name = "Chocolate", AvailableQuantity = 100,
-                CachedProductId = chocolateProduct.Id
+                CachedProductId = chocolateProduct.Id, OutGoingQuantity = 0
             };
             var cookiesStockItem = new StockItem()
             {
                 Id = Guid.NewGuid(), Name = "Cookies", AvailableQuantity = 100,
-                CachedProductId = cookiesProduct.Id
+                CachedProductId = cookiesProduct.Id, OutGoingQuantity = 0
             };
             var chipsStockItem = new StockItem()
             {
                 Id = Guid.NewGuid(), Name = "Chips", AvailableQuantity = 100,
-                CachedProductId = chipsProduct.Id
+                CachedProductId = chipsProduct.Id, OutGoingQuantity = 0
             };
 
             // Seed CachedProduct data

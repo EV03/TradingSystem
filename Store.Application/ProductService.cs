@@ -13,14 +13,14 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
     
-    public async Task<CachedProduct> ChangePrice(Guid productId, float newPrice)
+    public async Task<CachedProduct> ChangePrice(Guid productId, double newPrice)
     {
         var product = await _productRepository.GetByProductIdAsync(productId);
         if (product == null)
         {
             throw new ArgumentException("Product not found");
         }
-        product.CurrentPrice = newPrice; 
+        product.CurrentPrice = newPrice; ; 
         await _productRepository.Update(product);
         return product;
     }
