@@ -1,4 +1,4 @@
-import {OrderSupplier} from './OrderSupplier';
+import {OrderSupplier} from './orderSupplier';
 
 export class Order {
   id? : string;

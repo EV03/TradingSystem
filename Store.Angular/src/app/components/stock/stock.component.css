@@ -1,9 +1,93 @@
-﻿table {
-  margin-top: 40px;
+﻿/* Container Styles */
+.stock-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif; /* Optional: Include Roboto via Google Fonts */
+  background-color: #f7f7f7;
+  color: #333;
 }
 
+/* Section Card Styles */
+.stock-section {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stock-section h2 {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Responsive Table Container */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Table Styles */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.stock-table thead {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.stock-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.stock-table tbody tr:hover {
+  background-color: #e1f5fe;
+}
+
+/* Input Field Styles */
+.order-input {
+  width: 80px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* No Items Message */
+.no-items {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 10px 0;
+}
+
+/* Order Button Container */
 .order-button-container {
-  display: flex;
+  text-align: center;
   margin-top: 20px;
-  margin-left: 270px;
+}
+
+/* Order Button Styles */
+.order-button {
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-button:hover {
+  background-color: #219150;
 }

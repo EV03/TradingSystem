@@ -1,25 +1,42 @@
-<div *ngIf="products.length > 0">
-  <table border="1" style="border-collapse: collapse;">
-    <thead>
-    <tr>
-      <th>Product</th>
-      <th>Price (cents)</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let product of products">
-      <td>{{ product.name }}</td>
-      <td>
-        <input [(ngModel)]="product.price" type="number" (keydown.enter)="updatePrice(product.id, (product.price ?? 0) / 100)" />
-      </td>
-      <td>
-        <button (click)="updatePrice(product.id, (product.price ?? 0) / 100)">Update Price</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-<div *ngIf="products.length === 0">
-  No products available.
+<div class="products-container">
+  <section class="product-section">
+    <h2 class="section-title">Products</h2>
+
+    <div *ngIf="products.length > 0" class="table-responsive">
+      <table class="product-table">
+        <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price (cents)</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.name }}</td>
+          <td>
+            <input
+              [(ngModel)]="product.price"
+              type="number"
+              class="price-input"
+              (keydown.enter)="updatePrice(product.id, (product.price ?? 0) / 100)"
+            />
+          </td>
+          <td>
+            <button
+              (click)="updatePrice(product.id, (product.price ?? 0) / 100)"
+              class="update-button"
+            >
+              Update Price
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="products.length === 0" class="no-products">
+      No products available.
+    </div>
+  </section>
 </div>

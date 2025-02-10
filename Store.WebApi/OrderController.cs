@@ -42,7 +42,9 @@ public class OrderController : ControllerBase
         try
         {
             var orders = await _orderService.ShowOrders(orderIds.ToList());
-            return Ok(orders);
+            var oderDto = _mapper.Map<List<OrderDto>>(orders);
+            Console.WriteLine("Order requested");
+            return Ok(oderDto);
         }
         catch (Exception e)
         {

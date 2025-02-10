@@ -1,63 +1,70 @@
-﻿<div>
-  <h2>Low Stock Items</h2>
-  <div *ngIf="lowStockItems.length > 0">
-    <table border="1" style="border-collapse: collapse;">
-      <thead>
-      <tr>
-        <th>Product</th>
-        <th>Available Quantity</th>
-        <th>Incoming Quantity</th>
-        <th>Outgoing Quantity</th>
-        <th>Order Quantity</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of lowStockItems">
-        <td>{{ item.name }}</td>
-        <td>{{ item.availableQuantity }}</td>
-        <td>{{ item.incomingQuantity }}</td>
-        <td>{{ item.outGoingQuantity }}</td>
-        <td>
-          <input [(ngModel)]="item.orderQuantity" type="number" min="1" />
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div *ngIf="lowStockItems.length === 0">
-    No low stock items available.
-  </div>
+﻿<div class="stock-container">
+  <!-- Low Stock Items Section -->
+  <section class="stock-section low-stock">
+    <h2>Low Stock Items</h2>
+    <div *ngIf="lowStockItems.length > 0" class="table-responsive">
+      <table class="stock-table">
+        <thead>
+        <tr>
+          <th>Product</th>
+          <th>Available Quantity</th>
+          <th>Incoming Quantity</th>
+          <th>Outgoing Quantity</th>
+          <th>Order Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of lowStockItems">
+          <td>{{ item.name }}</td>
+          <td>{{ item.availableQuantity }}</td>
+          <td>{{ item.incomingQuantity }}</td>
+          <td>{{ item.outGoingQuantity }}</td>
+          <td>
+            <input [(ngModel)]="item.orderQuantity" type="number" min="1" class="order-input" />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="lowStockItems.length === 0" class="no-items">
+      No low stock items available.
+    </div>
+  </section>
 
-  <h2>All Stock Items</h2>
-  <div *ngIf="stockItems.length > 0">
-    <table border="1" style="border-collapse: collapse;">
-      <thead>
-      <tr>
-        <th>Product</th>
-        <th>Available Quantity</th>
-        <th>Incoming Quantity</th>
-        <th>Outgoing Quantity</th>
-        <th>Order Quantity</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of stockItems">
-        <td>{{ item.name }}</td>
-        <td>{{ item.availableQuantity }}</td>
-        <td>{{ item.incomingQuantity }}</td>
-        <td>{{ item.outGoingQuantity }}</td>
-        <td>
-          <input [(ngModel)]="item.orderQuantity" type="number" min="1" />
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div *ngIf="stockItems.length === 0">
-    No stock items available.
-  </div>
+  <!-- All Stock Items Section -->
+  <section class="stock-section all-stock">
+    <h2>All Stock Items</h2>
+    <div *ngIf="stockItems.length > 0" class="table-responsive">
+      <table class="stock-table">
+        <thead>
+        <tr>
+          <th>Product</th>
+          <th>Available Quantity</th>
+          <th>Incoming Quantity</th>
+          <th>Outgoing Quantity</th>
+          <th>Order Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of stockItems">
+          <td>{{ item.name }}</td>
+          <td>{{ item.availableQuantity }}</td>
+          <td>{{ item.incomingQuantity }}</td>
+          <td>{{ item.outGoingQuantity }}</td>
+          <td>
+            <input [(ngModel)]="item.orderQuantity" type="number" min="1" class="order-input" />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="stockItems.length === 0" class="no-items">
+      No stock items available.
+    </div>
+  </section>
 
+  <!-- Order Button -->
   <div class="order-button-container">
-    <button (click)="orderAllStockItems()">Order All</button>
+    <button (click)="orderAllStockItems()" class="order-button">Order All</button>
   </div>
 </div>
