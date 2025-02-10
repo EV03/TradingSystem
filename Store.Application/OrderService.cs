@@ -48,6 +48,9 @@ public class OrderService : IOrderService
             {
                 Id = Guid.NewGuid(),
                 OrderId = order.Id,
+                OrderDate = DateTime.Now,
+                DeliveryDate = null,
+                Order = order,
                 OrderSupplierProducts = new List<OrderSupplierCachedProduct>()
             };
             supplierToOrderSupplierMap[product.SupplierId] = orderSupplier;
@@ -55,7 +58,10 @@ public class OrderService : IOrderService
 
             orderSupplier.OrderSupplierProducts.Add(new OrderSupplierCachedProduct
             {
+                Id = Guid.NewGuid(),
                 OrderSupplierId = orderSupplier.Id,
+                OrderSupplier = orderSupplier,
+                CachedProduct = product,
                 CachedProductId = product.Id,
                 Quantity = orderProduct.Quantity
             });

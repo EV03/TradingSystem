@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import {ProductService} from '../services/ProductService';
+import { ProductService } from '../services/ProductService';
 import { Observer } from 'rxjs';
-import {CommonModule, CurrencyPipe} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Product} from '../models/product';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Product } from '../models/product';
 
 @Component({
   selector: 'app-products',
@@ -18,14 +18,14 @@ import {Product} from '../models/product';
 })
 export class ProductComponent implements OnInit {
   products: Product[] = [];
-  constructor(private productService: ProductService) { }
+  productObserver: Observer<Product[]>;
 
-  ngOnInit(): void {
-    const productObserver: Observer<Product[]> = {
+  constructor(private productService: ProductService) {
+    this.productObserver = {
       next: (data) => {
         this.products = data;
         console.log(data);
-        console.log("show proudcts");
+        console.log("show products");
       },
       error: (error) => {
         console.error("Error fetching products data:", error);
@@ -34,14 +34,18 @@ export class ProductComponent implements OnInit {
         console.log("product data fetch complete");
       }
     };
+  }
 
-    this.productService.showAllProducts().subscribe(productObserver);
+  ngOnInit(): void {
+    this.productService.showAllProducts().subscribe(this.productObserver);
   }
 
   updatePrice(productId: string | undefined, newPrice: number | undefined): void {
     this.productService.updateProductPrice(productId, newPrice).subscribe({
       next: () => {
         console.log(`Price for product with ID ${productId} updated successfully.`);
+        alert(`Price updated successfully.`);
+        this.productService.showAllProducts().subscribe(this.productObserver);
       },
       error: (error) => {
         console.error("Error updating product price:", error);

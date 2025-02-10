@@ -1,6 +1,6 @@
 ﻿export class Stock {
   id?: string;
-  productId?: string;
+  cachedProductId?: string;
   name?: string;
   availableQuantity?: number;
   incomingQuantity?: number;

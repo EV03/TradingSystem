@@ -11,10 +11,10 @@
     <tr *ngFor="let product of products">
       <td>{{ product.name }}</td>
       <td>
-        <input [(ngModel)]="product.price" type="number" (keydown.enter)="updatePrice(product.productId, (product.price ?? 0) / 100)" />
+        <input [(ngModel)]="product.price" type="number" (keydown.enter)="updatePrice(product.id, (product.price ?? 0) / 100)" />
       </td>
       <td>
-        <button (click)="updatePrice(product.productId, (product.price ?? 0) / 100)">Update Price</button>
+        <button (click)="updatePrice(product.id, (product.price ?? 0) / 100)">Update Price</button>
       </td>
     </tr>
     </tbody>

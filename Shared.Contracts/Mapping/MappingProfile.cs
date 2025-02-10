@@ -28,7 +28,9 @@ public class MappingProfile : Profile
         
         CreateMap<OrderSupplierCachedProduct, OrderSupplierCachedProductDto>()
             .ForMember(dest => dest.CachedProductId, opt => opt.MapFrom(src => src.CachedProductId))
-            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.CachedProductName, opt => opt.MapFrom(src => src.CachedProduct.Name));
+            
         
         CreateMap<CachedProduct, ProductDto>()
             .ForMember(dest => dest.Barcode, opt => opt.MapFrom(src => src.Barcode))

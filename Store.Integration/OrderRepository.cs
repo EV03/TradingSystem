@@ -20,6 +20,14 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order?> AddAsync(Order order)
     {
+        foreach (var orderSupplier in order.OrderSupplier)
+        {
+            foreach (var orderSupplierProduct in orderSupplier.OrderSupplierProducts)
+            {
+                _context.Entry(orderSupplierProduct.CachedProduct).State = EntityState.Unchanged;
+            }
+        }
+        
         await _context.Orders.AddAsync(order);
         await _context.SaveChangesAsync();
         return order;
