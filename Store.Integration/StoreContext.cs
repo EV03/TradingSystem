@@ -32,6 +32,12 @@ namespace Store.Integration
                 { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = Guid.NewGuid() };
             var chipsProduct = new CachedProduct
                 { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = Guid.NewGuid() };
+            
+            var bananaProduct = new CachedProduct
+                { Id = Guid.NewGuid(), Name = "Banana", Barcode = "Banana", CurrentPrice = 0.50, ProductId = Guid.NewGuid() };
+            
+            var strawberryProduct = new CachedProduct
+                { Id = Guid.NewGuid(), Name = "Strawberry", Barcode = "Strawberry", CurrentPrice = 0.75, ProductId = Guid.NewGuid() };
 
             var chocolateStockItem = new StockItem()
             {
@@ -48,19 +54,35 @@ namespace Store.Integration
                 Id = Guid.NewGuid(), Name = "Chips", AvailableQuantity = 100,
                 CachedProductId = chipsProduct.Id, OutGoingQuantity = 0
             };
+            
+            var bananaStockItem = new StockItem()
+            {
+                Id = Guid.NewGuid(), Name = "Banana", AvailableQuantity = 20,
+                CachedProductId = bananaProduct.Id, OutGoingQuantity = 0
+            };
+            
+            var strawberryStockItem = new StockItem()
+            {
+                Id = Guid.NewGuid(), Name = "Strawberry", AvailableQuantity = 40,
+                CachedProductId = strawberryProduct.Id, OutGoingQuantity = 0
+            };
 
             // Seed CachedProduct data
             modelBuilder.Entity<CachedProduct>().HasData(
                 chocolateProduct,
                 cookiesProduct,
-                chipsProduct
+                chipsProduct,
+                bananaProduct,
+                strawberryProduct
             );
 
             // Seed StockItem data
             modelBuilder.Entity<StockItem>().HasData(
                 chocolateStockItem,
                 cookiesStockItem,
-                chipsStockItem
+                chipsStockItem,
+                bananaStockItem,
+                strawberryStockItem
             );
             
             modelBuilder.Entity<CachedProduct>()

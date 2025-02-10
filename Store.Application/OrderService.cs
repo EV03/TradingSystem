@@ -81,6 +81,7 @@ public class OrderService : IOrderService
                 {
                     OrderSupplierId = orderSupplier.Id,
                     CachedProductId = product.Id,
+                    CachedProduct = product,
                     Quantity = orderProduct.Quantity
                 });
             }
