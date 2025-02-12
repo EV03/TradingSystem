@@ -27,17 +27,17 @@ namespace Store.Integration
         {
 
             var chocolateProduct = new CachedProduct()
-                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50, ProductId = Guid.NewGuid() };
+                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50, ProductId = Guid.NewGuid(), SupplierId = Guid.NewGuid() };
             var cookiesProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = Guid.NewGuid() };
+                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = Guid.NewGuid(), SupplierId = chocolateProduct.SupplierId};
             var chipsProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = Guid.NewGuid() };
+                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = Guid.NewGuid(), SupplierId = Guid.NewGuid()};
             
             var bananaProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Banana", Barcode = "Banana", CurrentPrice = 0.50, ProductId = Guid.NewGuid() };
+                { Id = Guid.NewGuid(), Name = "Banana", Barcode = "Banana", CurrentPrice = 0.50, ProductId = Guid.NewGuid() , SupplierId = Guid.NewGuid()};
             
             var strawberryProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Strawberry", Barcode = "Strawberry", CurrentPrice = 0.75, ProductId = Guid.NewGuid() };
+                { Id = Guid.NewGuid(), Name = "Strawberry", Barcode = "Strawberry", CurrentPrice = 0.75, ProductId = Guid.NewGuid(), SupplierId = bananaProduct.SupplierId};
 
             var chocolateStockItem = new StockItem()
             {

@@ -108,6 +108,7 @@ public class OrderService : IOrderService
 
         orderSupplier.DeliveryDate = DateTime.Now;
         await _stockService.UpdateStockFromOrderAsync(orderSupplier, false);
+        await _orderRepository.UpdateOrderSupplierAsync(orderSupplier);
     }
 
     public async Task<List<Order>?> ShowOrders(List<Guid>? orderIds)

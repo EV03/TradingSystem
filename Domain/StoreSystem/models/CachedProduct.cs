@@ -8,8 +8,8 @@ public class CachedProduct
    public double CurrentPrice { get; set; }
    
    public Guid ProductId { get; set; }
-   public Guid SupplierId { get; set;
-   
+   public Guid SupplierId { get; set; }
+
    public StockItem StockItem { get; set; } // navigation property
    
    public List<OrderSupplierCachedProduct> OrderSupplierProducts { get; set; } // navigation property
