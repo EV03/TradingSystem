@@ -1,0 +1,33 @@
+/* Navigation Container */
+.main-nav {
+  display: flex;
+  justify-content: flex-start; /* Align buttons to the left */
+  gap: 15px;
+  background-color: #3498db; /* Matches the header/table colors */
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Buttons */
+.nav-button {
+  background-color: #27ae60; /* Consistent with update button color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.nav-button:hover {
+  background-color: #219150;
+}
+
+/* Optional: Active Link Styling */
+.nav-button.router-link-active {
+  background-color: #1e8449;
+}

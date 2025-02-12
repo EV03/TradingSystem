@@ -1,0 +1,44 @@
+<div class="reports-container">
+  <section class="report-section">
+    <h2 class="section-title">Reports</h2>
+
+    <!-- Form for Enterprise ID -->
+    <form (ngSubmit)="loadReports()" class="report-form">
+      <div class="form-group">
+        <label for="enterpriseId">Enterprise ID:</label>
+        <input
+          type="text"
+          id="enterpriseId"
+          [(ngModel)]="enterpriseId"
+          name="enterpriseId"
+          required
+          class="input-field"
+        />
+      </div>
+      <button type="submit" class="fetch-button">Create Report</button>
+    </form>
+
+    <!-- Report Table or No Data Message -->
+    <div *ngIf="reports.length > 0; else noData" class="table-responsive">
+      <table class="report-table">
+        <thead>
+        <tr>
+          <th>Supplier Name</th>
+          <th>Average Delivery Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.supplierName }}</td>
+          <td>{{ report.averageDeliveryTime }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- No Data Message -->
+    <ng-template #noData>
+      <p class="no-data-message">No delivery information available.</p>
+    </ng-template>
+  </section>
+</div>

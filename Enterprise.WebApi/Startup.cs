@@ -21,6 +21,18 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
 builder.Services.AddTransient<IEventHandler<LowStockEvent>, LowStockEventHandler>();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://127.0.0.1:49879")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +44,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowSpecificOrigin"); // Add this line to use the CORS policy
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -50,4 +63,5 @@ using (var serviceScope = app.Services.CreateScope())
     var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
     await eventBus.SubscribeAsync<LowStockEvent, LowStockEventHandler>();
 }
+
 app.Run();

@@ -1,0 +1,105 @@
+/* Gesamtcontainer */
+.reports-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif; /* Optional: über Google Fonts einbinden */
+  background-color: #f9f9f9;
+}
+
+/* Card-Style für den Report-Bereich */
+.report-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Überschrift */
+.section-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+/* Formular-Styling */
+.report-form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-form .form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 300px;
+}
+
+.input-field {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button */
+.fetch-button {
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  align-self: flex-end;
+}
+
+.fetch-button:hover {
+  background-color: #219150;
+}
+
+/* Tabelle */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-table thead {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.report-table th,
+.report-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.report-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.report-table tbody tr:hover {
+  background-color: #e1f5fe;
+}
+
+.no-data-message {
+  font-size: 16px;
+  color: #555;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}

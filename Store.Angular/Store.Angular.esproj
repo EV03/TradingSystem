@@ -9,6 +9,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\components\security\" />
-    <Folder Include="src\app\components\shared\" />
   </ItemGroup>
 </Project>
