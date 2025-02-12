@@ -13,13 +13,7 @@ public class DeliveryRepository : IDeliveryRepository
     {
         _context = context;
     }
-
-    public async Task<List<DeliveryLog>> GetDeliveryLogsByEnterpriseId(Guid enterpriseId)
-    {
-        return await _context.DeliveryLogs.Where(x => x.EnterpriseId == enterpriseId).ToListAsync();
-    }
-    
-    public async Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesByEnterpriseId(Guid enterpriseId)
+    public async Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesByEnterpriseId(int enterpriseId)
     {
         return await _context.DeliveryLogs
             .Where(log => log.EnterpriseId == enterpriseId)
