@@ -2,14 +2,17 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import {KeycloakService} from '../security/KeycloakService';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'https://localhost:7138/api/orders';
+  private apiUrl : string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private keycloakService: KeycloakService) {
+    this.apiUrl = `${this.keycloakService.getApiUri()}/orders`;
+  }
 
   placeOrder(orderProductDto: any[]): Observable<any> {
     return this.http.post(`${this.apiUrl}/place-order`, orderProductDto)

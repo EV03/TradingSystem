@@ -2,14 +2,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product';
+import {KeycloakService} from '../security/KeycloakService';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://localhost:7138/api/products';
+  private apiUrl : string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private keycloakService: KeycloakService) {
+    this.apiUrl = `${this.keycloakService.getApiUri()}/products`;
   }
 
   updateProductPrice(productId: string | undefined, newPrice: number | undefined): Observable<void> {

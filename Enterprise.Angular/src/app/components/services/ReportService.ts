@@ -3,14 +3,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SupplierDeliveryTime } from '../models/SupplierDeliveryTime';
+import {KeycloakService} from '../security/KeycloakService';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
-  private apiUrl = 'https://localhost:7058/api/reports';
+  private apiUrl : string;
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private keycloakService: KeycloakService) {
+      this.apiUrl = `${this.keycloakService.getApiUri()}/reports`;
+  }
 
   showAllReports(enterpriseId: string): Observable<SupplierDeliveryTime[]> {
     const params = new HttpParams().set('enterpriseId', enterpriseId);
