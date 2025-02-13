@@ -6,6 +6,7 @@ public class OrderSupplier
     public DateTime? DeliveryDate { get; set; }
     public DateTime? OrderDate { get; set; }
     
+    public Guid SupplierId { get; set; }
     public Guid OrderId { get; set; }
     public Order Order { get; set; }
     

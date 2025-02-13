@@ -94,6 +94,7 @@ public class OrderService : IOrderService
         stockItem.IncomingQuantity += orderProduct.Quantity;
         await _stockItemRepository.UpdateAsync(stockItem);
     }
+    
 
     await _orderRepository.AddAsync(order);
     return order;

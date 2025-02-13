@@ -7,7 +7,5 @@ public class Supplier
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    
     public List<Product> Products { get; set; } // navigation property
-    public List<EnterpriseSupplier> EnterpriseSupplier { get; set; } // navigation property
 }

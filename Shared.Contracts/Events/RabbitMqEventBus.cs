@@ -12,6 +12,10 @@ public class RabbitMqEventBus : IEventBus
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly IServiceProvider _serviceProvider;
+    private readonly string _enterpriseId;
+
+    private const string ExchangeName = "enterprise.events";
+
     
     public RabbitMqEventBus(IServiceProvider serviceProvider)
     {
@@ -20,26 +24,37 @@ public class RabbitMqEventBus : IEventBus
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _serviceProvider = serviceProvider;
+
+        _enterpriseId = Environment.GetEnvironmentVariable("ENTERPRISE_ID") ?? throw new Exception("ENTERPRISE_ID is not set");
+
+        _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct, true);
     }
     
     
-    public Task PublishAsync<TEvent>(TEvent @event) where TEvent : class
+    public Task PublishAsync<TEvent>(string eventName, TEvent @event) where TEvent : class
     {
-        var eventName = typeof(TEvent).Name;
-        _channel.QueueDeclare(eventName, false, false, false, null);
-
+        var routingKey = GetRoutingKey(@event, eventName);
         var message = JsonSerializer.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(message);
         
-        _channel.BasicPublish("", eventName, null, body);
+        _channel.BasicPublish(ExchangeName, routingKey, null, body);
         return Task.CompletedTask;
+    }
+
+    private string GetRoutingKey<TEvent>(TEvent @event, string eventName) where TEvent : class {
+        var prefix = @event is IStoreEvent ? "store" : "enterprise";
+        return $"{prefix}.{_enterpriseId}.{eventName}";
     }
 
     public Task SubscribeAsync<TEvent, TEventHandler>() where TEvent : class where TEventHandler : IEventHandler<TEvent>
     {
-        var eventName = typeof(TEvent).Name;
-        _channel.QueueDeclare(queue: eventName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+      var queueName = $"{_enterpriseId}.{typeof(TEvent).Name}";
+        var prefix = typeof(IStoreEvent).IsAssignableFrom(typeof(TEvent)) ? "store" : "enterprise";
+        var routingPattern = $"{prefix}.{_enterpriseId}.*";
 
+        _channel.QueueDeclare(queueName, false, false, false, null);
+        _channel.QueueBind(queueName, ExchangeName, routingPattern);
+        
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += async (model, ea) =>
         {
@@ -54,7 +69,7 @@ public class RabbitMqEventBus : IEventBus
             }
         };
 
-        _channel.BasicConsume(queue: eventName, autoAck: true, consumer: consumer);
+        _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
         return Task.CompletedTask;
     }
 }

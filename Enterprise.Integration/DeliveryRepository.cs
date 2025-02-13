@@ -13,14 +13,13 @@ public class DeliveryRepository : IDeliveryRepository
     {
         _context = context;
     }
-    public async Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesByEnterpriseId(int enterpriseId)
+    public async Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesBy()
     {
         return await _context.DeliveryLogs
-            .Where(log => log.EnterpriseId == enterpriseId)
             .GroupBy(log => log.SupplierId)
             .Select(group => new SupplierDeliveryTime()
             {
-                SupplierName = group.First().SupplierName,
+                SupplierId = group.First().SupplierId,
                 AverageDeliveryTime = (int)group.Average(log => (log.DeliveryDate - log.OrderDate).TotalDays)
             })
             .ToListAsync();

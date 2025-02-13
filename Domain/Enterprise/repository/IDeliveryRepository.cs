@@ -5,5 +5,5 @@ namespace Domain.Enterprise.repository;
 
 public interface IDeliveryRepository
 {
-    public Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesByEnterpriseId(int enterpriseId);
+    public Task<List<SupplierDeliveryTime>> GetAverageSupplierDeliveryTimesBy();
 }

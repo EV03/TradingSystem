@@ -2,7 +2,7 @@
 
 public class SupplierDeliveryTimeDto
 {
-    public String SupplierName { get; set; }
+    public String SupplierId { get; set; }
     
     public int AverageDeliveryTime { get; set; } 
 }

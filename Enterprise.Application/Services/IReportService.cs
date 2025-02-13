@@ -4,5 +4,5 @@ namespace Enterprise.Application.Services;
 
 public interface IReportService
 {
-    Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes(int enterpriseId);
+    Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes();
 }

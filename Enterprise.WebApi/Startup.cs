@@ -1,6 +1,7 @@
 using Domain.Enterprise.repository;
 using Enterprise.Application;
 using Enterprise.Application.Services;
+using Enterprise.Application.EventHandlers;
 using Enterprise.Integration;
 using Microsoft.EntityFrameworkCore;
 using Shared.Contracts.Events;
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
 builder.Services.AddTransient<IEventHandler<LowStockEvent>, LowStockEventHandler>();
+builder.Services.AddTransient<IEventHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
+builder.Services.AddTransient<IEventHandler<OrderDeliveredEvent>, OrderDeliveredEventHandler>();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -62,6 +65,8 @@ using (var serviceScope = app.Services.CreateScope())
     // subscribe to events
     var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
     await eventBus.SubscribeAsync<LowStockEvent, LowStockEventHandler>();
+    await eventBus.SubscribeAsync<OrderCreatedEvent, OrderCreatedEventHandler>();
+    await eventBus.SubscribeAsync<OrderDeliveredEvent, OrderDeliveredEventHandler>();
 }
 
 app.Run();

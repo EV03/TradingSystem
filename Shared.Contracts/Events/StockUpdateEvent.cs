@@ -1,7 +1,7 @@
 ﻿namespace Shared.Contracts.Events;
 
 // Stores response to the InventorySyncEvent
-public class StockUpdateEvent
+public class StockUpdateEvent : IStoreEvent
 {
-    
+    public int EnterpriseId { get; set; }
 }

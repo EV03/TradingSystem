@@ -13,9 +13,9 @@ public class ReportService : IReportService
         _deliveryRepository = deliveryRepository;
     }
 
-    public async Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes(int enterpriseId)
+    public async Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes()
     {
-        var deliveryTimes = await _deliveryRepository.GetAverageSupplierDeliveryTimesByEnterpriseId(enterpriseId);
+        var deliveryTimes = await _deliveryRepository.GetAverageSupplierDeliveryTimesBy();
         return deliveryTimes;
     }
 }

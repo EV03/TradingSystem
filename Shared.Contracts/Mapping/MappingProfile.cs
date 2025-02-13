@@ -48,7 +48,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.OutGoingQuantity, opt => opt.MapFrom(src => src.OutGoingQuantity));
         
         CreateMap<SupplierDeliveryTime, SupplierDeliveryTimeDto>()
-            .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.SupplierName))
+            .ForMember(dest => dest.SupplierId, opt => opt.MapFrom(src => src.SupplierId))
             .ForMember(dest => dest.AverageDeliveryTime, opt => opt.MapFrom(src => src.AverageDeliveryTime));
     }
 }

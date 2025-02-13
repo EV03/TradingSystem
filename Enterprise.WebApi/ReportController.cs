@@ -21,11 +21,11 @@ public class ReportController : ControllerBase
     }
     
     [HttpGet("supplier-delivery-times")]
-    public async Task<IActionResult> GetSupplierDeliveryTimes([FromQuery] int enterpriseId)
+    public async Task<IActionResult> GetSupplierDeliveryTimes()
     {
         try
         {
-            var deliveryTimes = await _reportService.GetSupplierDeliveryTimes(enterpriseId);
+            var deliveryTimes = await _reportService.GetSupplierDeliveryTimes();
             var deliveryTimesDto = _mapper.Map<List<SupplierDeliveryTimeDto>>(deliveryTimes);
             Console.WriteLine("Supplier delivery times delivered");
             return Ok(deliveryTimesDto);
