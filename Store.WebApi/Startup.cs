@@ -11,19 +11,29 @@ using ProductService = Store.Grpc.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Kestrel für HTTP/2 konfigurieren
+// Kestrel configuration
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5131, listenOptions =>
+    var urls = builder.Configuration["ASPNETCORE_URLS"]?.Split(';');
+    if (urls != null)
     {
-        listenOptions.Protocols = HttpProtocols.Http1;
-    });
-
-    options.ListenAnyIP(7138, listenOptions =>
-    {
-        listenOptions.UseHttps();
-        listenOptions.Protocols = HttpProtocols.Http2; // Nur HTTP/2 auf HTTPS
-    });
+        foreach (var url in urls)
+        {
+            var uri = new Uri(url);
+            options.ListenAnyIP(uri.Port, listenOptions =>
+            {
+                if (uri.Scheme == Uri.UriSchemeHttps)
+                {
+                    listenOptions.UseHttps();
+                    listenOptions.Protocols = HttpProtocols.Http2; // Only HTTP/2 on HTTPS
+                }
+                else
+                {
+                    listenOptions.Protocols = HttpProtocols.Http1;
+                }
+            });
+        }
+    }
 });
 
 // Add services to the container.
@@ -52,7 +62,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:*")
+             builder
+                .SetIsOriginAllowed(origin => 
+                    origin.StartsWith("http://localhost:") || 
+                    origin.StartsWith("http://127.0.0.1:") ||
+                    origin.StartsWith("https://localhost:") || 
+                    origin.StartsWith("https://127.0.0.1:"))
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
