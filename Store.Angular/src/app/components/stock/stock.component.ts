@@ -70,7 +70,7 @@ export class StockComponent implements OnInit {
   private formatOrderDetails(orderDto: Order): string {
     let details = `Order ID: ${orderDto.id}\n`;
     orderDto.orderSupplier.forEach(supplier => {
-      details += `Supplier ID: ${supplier.id}}\n`;
+      details += `OrderSupplier ID: ${supplier.id}\n`;
       supplier.orderSupplierProducts.forEach(product => {
         details += `  Product Name: ${product.cachedProductName}, Quantity: ${product.quantity}\n`;
       });

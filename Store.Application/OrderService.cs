@@ -123,6 +123,10 @@ public class OrderService : IOrderService
             throw new Exception("Order supplier not found");
         }
 
+        if( orderSupplier.DeliveryDate != null)
+        {
+            throw new Exception("Order already received");
+        }
         orderSupplier.DeliveryDate = DateTime.Now;
         await _stockService.UpdateStockFromOrderAsync(orderSupplier, false);
         await _orderRepository.UpdateOrderSupplierAsync(orderSupplier);

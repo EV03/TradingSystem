@@ -41,6 +41,11 @@ export class ProductComponent implements OnInit {
   }
 
   updatePrice(productId: number | undefined, newPrice: number | undefined): void {
+    // @ts-ignore
+    if (newPrice < 0) {
+      console.error('Price cannot be negative');
+      return;
+    }
     this.productService.updateProductPrice(productId, newPrice).subscribe({
       next: () => {
         console.log(`Price for product with ID ${productId} updated successfully.`);
