@@ -13,9 +13,13 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public async Task<Order?> GetByIdAsync(Guid id)
+    public async Task<Order?> GetByIdAsync(long id)
     {
-        return await _context.Orders.FirstOrDefaultAsync(order => order.Id == id);
+          return await _context.Orders
+        .Include(o => o.OrderSupplier)
+        .ThenInclude(os => os.OrderSupplierProducts)
+        .ThenInclude(osp => osp.CachedProduct)
+        .FirstOrDefaultAsync(order => order.Id == id);
     }
 
     public async Task<Order?> AddAsync(Order order)
@@ -49,7 +53,7 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
-    public async Task<OrderSupplier?> GetOrderSupplierByIdAsync(Guid orderSupplierId)
+    public async Task<OrderSupplier?> GetOrderSupplierByIdAsync(long orderSupplierId)
     {
         return await _context.OrderSuppliers.
             Include(orderSupplier => orderSupplier.OrderSupplierProducts)

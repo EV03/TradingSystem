@@ -2,8 +2,8 @@
 
 public class LowStockEvent : IStoreEvent
 {
-    public int EnterpriseId { get; set; }
-    public int StoreId { get; set; }
-    public int ProductId { get; set; }
-    public int Quantity { get; set; }
+    public long EnterpriseId { get; set; }
+    public long StoreId { get; set; }
+    public long ProductId { get; set; }
+    public long Quantity { get; set; }
 }

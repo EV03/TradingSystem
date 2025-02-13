@@ -18,6 +18,7 @@
             <input
               [(ngModel)]="product.price"
               type="number"
+              min = "0"
               class="price-input"
               (keydown.enter)="updatePrice(product.id, (product.price ?? 0) / 100)"
             />

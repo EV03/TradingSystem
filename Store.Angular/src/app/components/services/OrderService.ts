@@ -21,7 +21,7 @@ export class OrderService {
       );
   }
 
-  getOrders(orderIds?: string[]): Observable<any> {
+  getOrders(orderIds?: number[]): Observable<any> {
     let params = new HttpParams();
     if (orderIds && orderIds.length > 0) {
       params = params.set('orderIds', orderIds.join(','));
@@ -32,7 +32,7 @@ export class OrderService {
       );
   }
 
-  rollReceivedOrder(orderSupplierId: string): Observable<any> {
+  rollReceivedOrder(orderSupplierId: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/roll-received-order`, null, {
       params: {
         orderSupplierId: orderSupplierId

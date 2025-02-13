@@ -4,7 +4,7 @@ namespace Domain.Enterprise.models;
 
 public class Product
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     
     public string Name { get; set; }
     
@@ -12,7 +12,7 @@ public class Product
     
     public string Barcode { get; set; }
     
-    public static Guid SupplierId { get; set; }
+    public long SupplierId { get; set; }
     public Supplier Supplier { get; set; } // navigation property
     
 }

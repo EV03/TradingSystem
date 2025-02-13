@@ -14,7 +14,7 @@ export class ProductService {
     this.apiUrl = `${this.keycloakService.getApiUri()}/products`;
   }
 
-  updateProductPrice(productId: string | undefined, newPrice: number | undefined): Observable<void> {
+  updateProductPrice(productId: number | undefined, newPrice: number | undefined): Observable<void> {
     if (productId === undefined || newPrice === undefined) {
       throw new Error("ProductId and newPrice must be defined");
     }

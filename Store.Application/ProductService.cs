@@ -13,7 +13,7 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
     
-    public async Task<CachedProduct> ChangePrice(Guid productId, double newPrice)
+    public async Task<CachedProduct> ChangePrice(long productId, double newPrice)
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product == null)

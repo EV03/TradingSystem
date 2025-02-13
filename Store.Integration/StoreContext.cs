@@ -10,7 +10,6 @@ namespace Store.Integration
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
         }
-        public DbSet<Domain.StoreSystem.models.Store> Stores { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderSupplier> OrderSuppliers { get; set; } 
         
@@ -27,43 +26,43 @@ namespace Store.Integration
         {
 
             var chocolateProduct = new CachedProduct()
-                { Id = Guid.NewGuid(), Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50, ProductId = Guid.NewGuid(), SupplierId = Guid.NewGuid() };
+                { Id = 1001L, Name = "Chocolate", Barcode = "Chocolate", CurrentPrice = 1.50, ProductId = 1L, SupplierId = 1L};
             var cookiesProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = Guid.NewGuid(), SupplierId = chocolateProduct.SupplierId};
+                { Id = 1002L, Name = "Cookies", Barcode = "Cookies", CurrentPrice = 2.00, ProductId = 2L, SupplierId = chocolateProduct.SupplierId};
             var chipsProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = Guid.NewGuid(), SupplierId = Guid.NewGuid()};
+                { Id = 1003L, Name = "Chips", Barcode = "Chips", CurrentPrice = 1.00, ProductId = 3L, SupplierId = 2L};
             
             var bananaProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Banana", Barcode = "Banana", CurrentPrice = 0.50, ProductId = Guid.NewGuid() , SupplierId = Guid.NewGuid()};
+                { Id = 1004L, Name = "Banana", Barcode = "Banana", CurrentPrice = 0.50, ProductId = 4L, SupplierId = 3L};
             
             var strawberryProduct = new CachedProduct
-                { Id = Guid.NewGuid(), Name = "Strawberry", Barcode = "Strawberry", CurrentPrice = 0.75, ProductId = Guid.NewGuid(), SupplierId = bananaProduct.SupplierId};
+                { Id = 1005L, Name = "Strawberry", Barcode = "Strawberry", CurrentPrice = 0.75, ProductId = 5L, SupplierId = bananaProduct.SupplierId};
 
             var chocolateStockItem = new StockItem()
             {
-                Id = Guid.NewGuid(), Name = "Chocolate", AvailableQuantity = 100,
+                Id = 2001L, Name = "Chocolate", AvailableQuantity = 100,
                 CachedProductId = chocolateProduct.Id, OutGoingQuantity = 0
             };
             var cookiesStockItem = new StockItem()
             {
-                Id = Guid.NewGuid(), Name = "Cookies", AvailableQuantity = 100,
+                Id = 2002L, Name = "Cookies", AvailableQuantity = 100,
                 CachedProductId = cookiesProduct.Id, OutGoingQuantity = 0
             };
             var chipsStockItem = new StockItem()
             {
-                Id = Guid.NewGuid(), Name = "Chips", AvailableQuantity = 100,
+                Id = 2003L, Name = "Chips", AvailableQuantity = 100,
                 CachedProductId = chipsProduct.Id, OutGoingQuantity = 0
             };
             
             var bananaStockItem = new StockItem()
             {
-                Id = Guid.NewGuid(), Name = "Banana", AvailableQuantity = 20,
+                Id = 2004L, Name = "Banana", AvailableQuantity = 20,
                 CachedProductId = bananaProduct.Id, OutGoingQuantity = 0
             };
             
             var strawberryStockItem = new StockItem()
             {
-                Id = Guid.NewGuid(), Name = "Strawberry", AvailableQuantity = 40,
+                Id = 2005L, Name = "Strawberry", AvailableQuantity = 40,
                 CachedProductId = strawberryProduct.Id, OutGoingQuantity = 0
             };
 

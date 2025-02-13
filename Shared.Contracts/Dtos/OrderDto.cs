@@ -2,6 +2,6 @@
 
 public class OrderDto
 {
-    public Guid Id { get; set; } 
+    public long Id { get; set; } 
     public List<OrderSupplierDto> OrderSupplier { get; set; }
 }

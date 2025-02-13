@@ -4,12 +4,12 @@ namespace Domain.StoreSystem.repository;
 
 public interface IStockItemRepository {
     
-    Task<StockItem?> GetByIdAsync(Guid id);
+    Task<StockItem?> GetByIdAsync(long id);
     
     Task<StockItem?> UpdateAsync(StockItem stockItem);
     
     Task<IEnumerable<StockItem>?> GetAllStocksAsync();
     
-    Task<StockItem?> GetByCachedProductIdAsync(Guid cachedProductId);
+    Task<StockItem?> GetByCachedProductIdAsync(long cachedProductId);
     
 }

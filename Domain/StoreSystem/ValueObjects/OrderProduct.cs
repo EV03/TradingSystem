@@ -2,7 +2,7 @@
 
 public class OrderProduct
 {
-    public Guid CachedProductId { get; set; }
+    public long CachedProductId { get; set; }
     
     public int Quantity { get; set; }
 }

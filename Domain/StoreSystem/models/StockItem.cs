@@ -2,13 +2,13 @@
 
 public class StockItem
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; }
     
     int MinStock { get; set; } // for low stock alert
     public int AvailableQuantity { get; set; }
     public int OutGoingQuantity  { get; set; } // quantity sent to another store ( unavailable )
     public int IncomingQuantity { get; set; } // quantity received from another store ( unavailable )
-    public Guid CachedProductId { get; set; }
+    public long CachedProductId { get; set; }
     public CachedProduct CachedProduct { get; set; } // navigation property
 }

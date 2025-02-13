@@ -15,8 +15,6 @@ public class RabbitMqEventBus : IEventBus
     private readonly string _enterpriseId;
 
     private const string ExchangeName = "enterprise.events";
-
-    
     public RabbitMqEventBus(IServiceProvider serviceProvider)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };

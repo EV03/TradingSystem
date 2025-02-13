@@ -1,5 +1,5 @@
 ﻿export class OrderSupplierProduct {
-  cachedProductId?: string;
-  cachedProductName?: string;
+  cachedProductId?: number;
+  cachedProductName?: number;
   quantity?: number;
 }

@@ -4,7 +4,6 @@ using Domain.StoreSystem.models;
 using Domain.StoreSystem.repository;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Store.Integration;
 public class ProductRepository : IProductRepository
 {
@@ -15,14 +14,14 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<CachedProduct?> GetByProductIdAsync(Guid productId)
+    public async Task<CachedProduct?> GetByProductIdAsync(long productId)
     {
         return await _context.CachedProducts
             .Include(product => product.StockItem)
             .FirstOrDefaultAsync(product => product.ProductId == productId);
     }
 
-    public Task<CachedProduct?> GetByIdAsync(Guid id)
+    public Task<CachedProduct?> GetByIdAsync(long id)
     {
      
         return _context.CachedProducts

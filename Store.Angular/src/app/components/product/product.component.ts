@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit {
     this.productService.showAllProducts().subscribe(this.productObserver);
   }
 
-  updatePrice(productId: string | undefined, newPrice: number | undefined): void {
+  updatePrice(productId: number | undefined, newPrice: number | undefined): void {
     this.productService.updateProductPrice(productId, newPrice).subscribe({
       next: () => {
         console.log(`Price for product with ID ${productId} updated successfully.`);

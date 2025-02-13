@@ -3,5 +3,5 @@
 // Stores response to the InventorySyncEvent
 public class StockUpdateEvent : IStoreEvent
 {
-    public int EnterpriseId { get; set; }
+    public long EnterpriseId { get; set; }
 }

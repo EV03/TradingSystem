@@ -8,6 +8,6 @@ namespace Store.Application.service;
 public interface IOrderService
 {
     Task<Order>  PlaceOrderAsync(List<OrderProduct>  orderProducts); 
-    Task RollReceivedOrderAsync(Guid orderSupplierId);
-    Task<List<Order>?> ShowOrders(List<Guid>? orderIds);
+    Task RollReceivedOrderAsync(long orderSupplierId);
+    Task<List<Order>?> ShowOrders(List<long>? orderIds);
 }  

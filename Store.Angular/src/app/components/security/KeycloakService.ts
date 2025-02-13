@@ -37,7 +37,7 @@ export class KeycloakService {
   private setApiUri(): void {
     const username = this.keycloakAuth.tokenParsed?.['preferred_username'];
     if (username === 'storemanager') {
-      this.apiUri = ' https://localhost:7138/api';
+      this.apiUri = 'https://localhost:7001/api';
     } else if (username === 'storemanager2') {
       this.apiUri = '';
     } else {

@@ -19,7 +19,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPatch("change-price")]
-    public async Task<IActionResult> ChangePriceAsync([FromQuery] Guid productId, [FromBody] double newPrice)
+    public async Task<IActionResult> ChangePriceAsync([FromQuery] long productId, [FromBody] double newPrice)
     {
         try
         {

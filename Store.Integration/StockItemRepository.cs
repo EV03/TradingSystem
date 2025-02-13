@@ -12,7 +12,7 @@ public class StockItemRepository : IStockItemRepository
     {
         _context = context;
     }
-    public async Task<StockItem?> GetByIdAsync(Guid id)
+    public async Task<StockItem?> GetByIdAsync(long id)
     {
         return await _context.StockItems.FirstOrDefaultAsync(item => item.Id == id);
     }
@@ -29,7 +29,7 @@ public class StockItemRepository : IStockItemRepository
         return await _context.StockItems.ToListAsync();
     }
 
-    public Task<StockItem?> GetByCachedProductIdAsync(Guid cachedProductId)
+    public Task<StockItem?> GetByCachedProductIdAsync(long cachedProductId)
     {
         return _context.StockItems.FirstOrDefaultAsync(item => item.CachedProductId == cachedProductId);
     }

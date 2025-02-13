@@ -2,13 +2,13 @@
 
 public class CachedProduct
 {
-   public Guid Id { get; set; }
+   public long Id { get; set; }
    public String Barcode { get; set; }
    public String Name { get; set; }
    public double CurrentPrice { get; set; }
    
-   public Guid ProductId { get; set; }
-   public Guid SupplierId { get; set; }
+   public long ProductId { get; set; }
+   public long SupplierId { get; set; }
 
    public StockItem StockItem { get; set; } // navigation property
    

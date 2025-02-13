@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class OrderComponent implements OnInit {
   orders: Order[] = [];
-  orderSupplierId: string = '';
+  orderSupplierId: number = 0;
 
 
   constructor(private orderService: OrderService) {}
@@ -42,7 +42,7 @@ export class OrderComponent implements OnInit {
       this.orderService.rollReceivedOrder(this.orderSupplierId).subscribe(() => {
         alert('Order checked in successfully');
         this.showOrders();
-        this.orderSupplierId = '';
+        this.orderSupplierId = 0;
       }, error => {
         alert('Error checking in order');
       });

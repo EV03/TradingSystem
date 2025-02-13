@@ -2,5 +2,5 @@ namespace Shared.Contracts.Events;
 
 public interface IEnterpriseEvent
 {
-    public int EnterpriseId { get; set; }
+    public long EnterpriseId { get; set; }
 }

@@ -37,7 +37,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetOrderAsync([FromQuery] Guid[] orderIds)
+    public async Task<IActionResult> GetOrderAsync([FromQuery] long[] orderIds)
     {
         try
         {
@@ -53,7 +53,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPatch("roll-received-order")]
-    public async Task<IActionResult> RollReceivedOrderAsync([FromQuery] Guid orderSupplierId)
+    public async Task<IActionResult> RollReceivedOrderAsync([FromQuery] long orderSupplierId)
     {
         try
         {

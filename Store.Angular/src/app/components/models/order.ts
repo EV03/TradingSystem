@@ -1,6 +1,6 @@
 import {OrderSupplier} from './orderSupplier';
 
 export class Order {
-  id? : string;
+  id? : number;
   orderSupplier: OrderSupplier[] = [];
 }
