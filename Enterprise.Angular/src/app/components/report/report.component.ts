@@ -15,16 +15,14 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class ReportComponent implements OnInit {
-  enterpriseId: string = '';
   reports: SupplierDeliveryTime[] = [];
 
   constructor(private reportService: ReportService) { }
 
   ngOnInit(): void { }
 
-  loadReports(): void {
-    if (this.enterpriseId) {
-      this.reportService.showAllReports(this.enterpriseId).subscribe({
+  loadReports(): void {{
+      this.reportService.showAllReports().subscribe({
         next: (data: any) => {
           this.reports = data;
         },

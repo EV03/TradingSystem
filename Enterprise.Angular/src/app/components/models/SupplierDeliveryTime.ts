@@ -1,4 +1,4 @@
 ﻿export  class SupplierDeliveryTime {
-  supplierName: string = '';
+  supplierName: number | null  = null ;
   averageDeliveryTime: number = 0;
 }

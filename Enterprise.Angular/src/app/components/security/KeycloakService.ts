@@ -37,7 +37,7 @@ export class KeycloakService {
   private setApiUri(): void {
     const username = this.keycloakAuth.tokenParsed?.['preferred_username'];
     if (username === 'enterprisemanager') {
-      this.apiUri = ' https://localhost:7058/api';
+      this.apiUri = ' https://localhost:7003/api';
     } else if (username === 'enterprisemanager2') {
       this.apiUri = '';
     } else {
@@ -46,14 +46,5 @@ export class KeycloakService {
   }
   getApiUri(): string {
     return this.apiUri;
-  }
-
-
-  getToken(): string | undefined {
-    return this.keycloakAuth.token;
-  }
-
-  logout(): void {
-    this.keycloakAuth.logout({ redirectUri: window.location.origin });
   }
 }

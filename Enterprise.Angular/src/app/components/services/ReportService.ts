@@ -15,9 +15,8 @@ export class ReportService {
       this.apiUrl = `${this.keycloakService.getApiUri()}/reports`;
   }
 
-  showAllReports(enterpriseId: string): Observable<SupplierDeliveryTime[]> {
-    const params = new HttpParams().set('enterpriseId', enterpriseId);
-    return this.http.get<SupplierDeliveryTime[]>(`${this.apiUrl}/supplier-delivery-times`, { params })
+  showAllReports(): Observable<SupplierDeliveryTime[]> {
+    return this.http.get<SupplierDeliveryTime[]>(`${this.apiUrl}/supplier-delivery-times`)
       .pipe(
         catchError(this.handleError)
       );

@@ -2,19 +2,8 @@
   <section class="report-section">
     <h2 class="section-title">Reports</h2>
 
-    <!-- Form for Enterprise ID -->
+    <!-- Form for Creating Report -->
     <form (ngSubmit)="loadReports()" class="report-form">
-      <div class="form-group">
-        <label for="enterpriseId">Enterprise ID:</label>
-        <input
-          type="text"
-          id="enterpriseId"
-          [(ngModel)]="enterpriseId"
-          name="enterpriseId"
-          required
-          class="input-field"
-        />
-      </div>
       <button type="submit" class="fetch-button">Create Report</button>
     </form>
 
