@@ -1,16 +1,23 @@
 ﻿
 using CashDesk.Application;
 using CashDesk.Infrastructure;
-using Domain.CashDesk;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 class Program
 {
-     static void Main(string[] args)
+    static void Main(string[] args)
     {
-        var serviceProvider = CashDeskDependencyInjection.ConfigureServices();
-        Console.WriteLine("CashDesk Server started");
+        var profileName = args.Length > 0 ? args[0] : "CashDesk1";
+
+    var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+        
+        var serviceProvider = CashDeskDependencyInjection.ConfigureServices(configuration,profileName);
+        Console.WriteLine($"CashDesk Server started with profile {profileName}");
         var cashDeskController = serviceProvider.GetRequiredService<CashDeskController>();
+        
        // wait for Ctrl+C
         using var cts = new CancellationTokenSource();
 

@@ -14,7 +14,7 @@ using CashDeskHardwareControllers.DisplayService;
 using CashDeskHardwareControllers.PrinterService;
 using CashDeskHardwareControllers.PrinterService.PrintingService;
 using Domain.CashDesk;
-using Shared.Contracts;
+using Microsoft.Extensions.Configuration;
 using Shared.Contracts.Interfaces;
 using Shared.Contracts.Protos;
 using IDisplayController = Domain.CashDesk.IDisplayController;
@@ -24,7 +24,7 @@ namespace CashDesk.Infrastructure;
 // Each cash desk runs as a separate process
 public class CashDeskDependencyInjection
 {
-    public static ServiceProvider ConfigureServices()
+    public static ServiceProvider ConfigureServices(IConfiguration configuration, string profileName)
     {
         var services = new ServiceCollection();
 
@@ -130,9 +130,21 @@ public class CashDeskDependencyInjection
         services.AddSingleton<CashDeskController>();
         
         // Register gRPC client
+        var storeAddress = configuration.GetSection($"Profiles:{profileName}:StoreAddress").Value;
+
+        if (string.IsNullOrEmpty(storeAddress))
+        {
+            throw new InvalidOperationException($"Store address not found in configuration for profile: {profileName}");
+        }
+
+        if (!Uri.TryCreate(storeAddress, UriKind.Absolute, out var uri))
+        {
+            throw new InvalidOperationException($"Invalid store address in configuration: {storeAddress}");
+        }
+
         services.AddGrpcClient<Product.ProductClient>(o =>
         {
-            o.Address = new Uri("https://localhost:5131");
+            o.Address = uri;
         });
 
         return services.BuildServiceProvider();

@@ -10,10 +10,9 @@ namespace CashDesk.Integration;
 public class GrpcStoreClient : IStoreCommunication
 {
     private readonly Product.ProductClient _productServiceClient;
-    public GrpcStoreClient()
+    public GrpcStoreClient(Product.ProductClient productClient)
     {
-        var channel = GrpcChannel.ForAddress("https://localhost:7138"); 
-        _productServiceClient = new Product.ProductClient(channel);
+        _productServiceClient = productClient;
     }
     // grpc client stub 
     public async Task<ProductDto> GetProduct(string barcode)
