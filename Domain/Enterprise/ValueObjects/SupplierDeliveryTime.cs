@@ -4,5 +4,5 @@ public class SupplierDeliveryTime
 {
     public long SupplierId { get; set; }
     
-    public int AverageDeliveryTime { get; set; }
+    public string AverageDeliveryTime { get; set; }
 }

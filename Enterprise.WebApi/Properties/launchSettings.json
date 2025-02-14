@@ -27,8 +27,6 @@
       "applicationUrl": "https://localhost:7003;http://localhost:5003",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "STORE_ID_1": "1001",
-        "STORE_ID_2": "1002",
         "ENTERPRISE_ID": "1"
       }
     },

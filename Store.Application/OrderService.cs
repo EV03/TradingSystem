@@ -106,12 +106,13 @@ public class OrderService : IOrderService
         var orderCreatedEvent = new OrderCreatedEvent
         {
             OrderId = order.Id,
+            OrderSupplierId = orderSupplier.Id,
             SupplierId = orderSupplier.SupplierId,
             SupplierName = null, // add name later 
             EnterpriseId = long.Parse(_enterpriseId),
             OrderDate = orderSupplier.OrderDate ?? DateTime.Now
         };
-        await _eventBus.PublishAsync("order.created",orderCreatedEvent);
+        await _eventBus.PublishAsync(orderCreatedEvent);
     }
     return order;
 }
@@ -134,11 +135,12 @@ public class OrderService : IOrderService
         var orderDeliveredEvent = new OrderDeliveredEvent
         {
             OrderId = orderSupplier.OrderId,
+            OrderSupplierId = orderSupplier.Id,
             SupplierId = orderSupplier.SupplierId,
             DeliveryDate = orderSupplier.DeliveryDate ?? DateTime.Now,
             EnterpriseId = long.Parse(_enterpriseId)
         };
-        await _eventBus.PublishAsync("order.delivered", orderDeliveredEvent);
+        await _eventBus.PublishAsync(orderDeliveredEvent);
     }
 
     public async Task<List<Order>?> ShowOrders(List<long>? orderIds)

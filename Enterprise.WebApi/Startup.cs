@@ -16,13 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<EnterpriseContext>(options =>
     options.UseInMemoryDatabase("EnterpriseSystem"));
 
-builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+builder.Services.AddScoped<IDeliveryLogRepository, DeliveryLogLogRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IOrderProcessingService, OrderProcessingService>();
 
 builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
-builder.Services.AddTransient<IEventHandler<LowStockEvent>, LowStockEventHandler>();
-builder.Services.AddTransient<IEventHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
-builder.Services.AddTransient<IEventHandler<OrderDeliveredEvent>, OrderDeliveredEventHandler>();
+builder.Services.AddScoped<OrderCreatedEventHandler>();
+builder.Services.AddScoped<IEventHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
+builder.Services.AddScoped<IEventHandler<OrderDeliveredEvent>, OrderDeliveredEventHandler>();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -66,12 +67,10 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<EnterpriseContext>();
     context.Database.EnsureCreated();
-    
-    // subscribe to events
-    var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
-    await eventBus.SubscribeAsync<LowStockEvent, LowStockEventHandler>();
-    await eventBus.SubscribeAsync<OrderCreatedEvent, OrderCreatedEventHandler>();
-    await eventBus.SubscribeAsync<OrderDeliveredEvent, OrderDeliveredEventHandler>();
 }
 
+// subscribe to events
+var eventBus = app.Services.GetRequiredService<IEventBus>();
+await eventBus.SubscribeAsync<OrderCreatedEvent, OrderCreatedEventHandler>();
+await eventBus.SubscribeAsync<OrderDeliveredEvent, OrderDeliveredEventHandler>();
 app.Run();

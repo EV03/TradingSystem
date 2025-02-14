@@ -12,13 +12,13 @@
       <table class="report-table">
         <thead>
         <tr>
-          <th>Supplier Name</th>
+          <th>SupplierID</th>
           <th>Average Delivery Time</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let report of reports">
-          <td>{{ report.supplierName }}</td>
+          <td>{{ report.supplierId }}</td>
           <td>{{ report.averageDeliveryTime }}</td>
         </tr>
         </tbody>

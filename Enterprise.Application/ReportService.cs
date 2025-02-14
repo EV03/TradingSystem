@@ -6,16 +6,16 @@ namespace Enterprise.Application;
 
 public class ReportService : IReportService
 {
-    private readonly IDeliveryRepository _deliveryRepository;
+    private readonly IDeliveryLogRepository _deliveryLogRepository;
     
-    public ReportService(IDeliveryRepository deliveryRepository)
+    public ReportService(IDeliveryLogRepository deliveryLogRepository)
     {
-        _deliveryRepository = deliveryRepository;
+        _deliveryLogRepository = deliveryLogRepository;
     }
 
     public async Task<List<SupplierDeliveryTime>> GetSupplierDeliveryTimes()
     {
-        var deliveryTimes = await _deliveryRepository.GetAverageSupplierDeliveryTimesBy();
+        var deliveryTimes = await _deliveryLogRepository.GetAverageSupplierDeliveryTimes();
         return deliveryTimes;
     }
 }
