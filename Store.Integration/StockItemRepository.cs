@@ -33,4 +33,9 @@ public class StockItemRepository : IStockItemRepository
     {
         return _context.StockItems.FirstOrDefaultAsync(item => item.CachedProductId == cachedProductId);
     }
+    
+    public async Task<StockItem?> GetByProductIdAsync(long productId)
+    {
+        return await _context.StockItems.FirstOrDefaultAsync(item => item.CachedProductId == productId);
+    }
 }

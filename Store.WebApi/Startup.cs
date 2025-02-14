@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Shared.Contracts.Events;
 using Shared.Contracts.Mapping;
 using Store.Application;
+using Store.Application.EventHandlers;
 using Store.Application.service;
 using Store.Integration;
 using ProductService = Store.Grpc.Services.ProductService;
@@ -52,6 +53,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, Store.Application.ProductService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEventHandler<InventorySyncReqEvent>, InventorySyncReqEventHandler>();
+builder.Services.AddScoped<IEventHandler<ProductTransferEvent>, ProductTransferEventHandler>();
 
 
 builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
@@ -110,8 +113,9 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<StoreContext>();
     context.Database.EnsureCreated();
-    
-    var eventBus = serviceScope.ServiceProvider.GetRequiredService<IEventBus>();
 }
-
+// subscribe to events
+var eventBus = app.Services.GetRequiredService<IEventBus>();
+await eventBus.SubscribeAsync<InventorySyncReqEvent, InventorySyncReqEventHandler>();
+await eventBus.SubscribeAsync<ProductTransferEvent, ProductTransferEventHandler>();
 app.Run();

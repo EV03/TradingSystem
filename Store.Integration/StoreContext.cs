@@ -41,29 +41,29 @@ namespace Store.Integration
             var chocolateStockItem = new StockItem()
             {
                 Id = 2001L, Name = "Chocolate", AvailableQuantity = 100,
-                CachedProductId = chocolateProduct.Id, OutGoingQuantity = 0
+                CachedProductId = chocolateProduct.Id, OutGoingQuantity = 0, MinStock = 40
             };
             var cookiesStockItem = new StockItem()
             {
                 Id = 2002L, Name = "Cookies", AvailableQuantity = 100,
-                CachedProductId = cookiesProduct.Id, OutGoingQuantity = 0
+                CachedProductId = cookiesProduct.Id, OutGoingQuantity = 0, MinStock = 40
             };
             var chipsStockItem = new StockItem()
             {
                 Id = 2003L, Name = "Chips", AvailableQuantity = 100,
-                CachedProductId = chipsProduct.Id, OutGoingQuantity = 0
+                CachedProductId = chipsProduct.Id, OutGoingQuantity = 0, MinStock = 40
             };
             
             var bananaStockItem = new StockItem()
             {
                 Id = 2004L, Name = "Banana", AvailableQuantity = 20,
-                CachedProductId = bananaProduct.Id, OutGoingQuantity = 0
+                CachedProductId = bananaProduct.Id, OutGoingQuantity = 0, MinStock = 40
             };
             
             var strawberryStockItem = new StockItem()
             {
                 Id = 2005L, Name = "Strawberry", AvailableQuantity = 40,
-                CachedProductId = strawberryProduct.Id, OutGoingQuantity = 0
+                CachedProductId = strawberryProduct.Id, OutGoingQuantity = 0, MinStock = 40
             };
 
             // Seed CachedProduct data

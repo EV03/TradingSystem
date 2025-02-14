@@ -24,6 +24,15 @@ builder.Services.AddSingleton<IEventBus, RabbitMqEventBus>();
 builder.Services.AddScoped<OrderCreatedEventHandler>();
 builder.Services.AddScoped<IEventHandler<OrderCreatedEvent>, OrderCreatedEventHandler>();
 builder.Services.AddScoped<IEventHandler<OrderDeliveredEvent>, OrderDeliveredEventHandler>();
+builder.Services.AddScoped<IEventHandler<LowStockEvent>, LowStockEventHandler>();
+
+int totalStoreCount = 2; // 2 profiles for now
+builder.Services.AddScoped<IEventHandler<InventorySyncResEvent>>(provider =>
+    new InventorySyncResEventHandler(
+        provider.GetRequiredService<IEventBus>(),
+        totalStoreCount
+    )
+);
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -73,4 +82,7 @@ using (var serviceScope = app.Services.CreateScope())
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 await eventBus.SubscribeAsync<OrderCreatedEvent, OrderCreatedEventHandler>();
 await eventBus.SubscribeAsync<OrderDeliveredEvent, OrderDeliveredEventHandler>();
+await eventBus.SubscribeAsync<LowStockEvent, LowStockEventHandler>();
+await eventBus.SubscribeAsync<InventorySyncResEvent, InventorySyncResEventHandler>();
+
 app.Run();

@@ -81,11 +81,12 @@ public class RabbitMqEventBus : IEventBus
 
                 if (@event != null && ShouldHandleEvent(@event, ea.RoutingKey))
                 {
-                    await handler.HandleAsync(@event);  
+                    await handler.HandleAsync(@event); 
+                    _channel.BasicAck(ea.DeliveryTag, false);
                 }
             }
         };
-        _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+        _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
         return Task.CompletedTask;
     }
     private string GetQueueName<TEvent>() where TEvent : class

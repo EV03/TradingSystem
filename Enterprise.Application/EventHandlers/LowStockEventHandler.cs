@@ -4,8 +4,23 @@ namespace Enterprise.Application.EventHandlers;
 
 public class LowStockEventHandler : IEventHandler<LowStockEvent>
 {
-    public Task HandleAsync(LowStockEvent @event)
+    private readonly IEventBus _eventBus;
+    
+    public LowStockEventHandler(IEventBus eventBus)
     {
-        throw new NotImplementedException();
+        _eventBus = eventBus;
+    }
+    public async  Task HandleAsync(LowStockEvent @event)
+    {
+        // here we could check which stores we want to exclude by heuristics
+        
+        var inventorySyncReqEvent = new InventorySyncReqEvent()
+        {
+            EnterpriseId = @event.EnterpriseId,
+            ProductIds = @event.ProductIds,
+            ExcludedStoreIds = new List<long>() { @event.ToStoreId },
+            ToStoreId = @event.ToStoreId
+        };
+       await _eventBus.PublishAsync(inventorySyncReqEvent);
     }
 }

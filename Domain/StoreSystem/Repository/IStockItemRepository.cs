@@ -12,4 +12,6 @@ public interface IStockItemRepository {
     
     Task<StockItem?> GetByCachedProductIdAsync(long cachedProductId);
     
+    Task<StockItem?> GetByProductIdAsync(long productId);
+    
 }

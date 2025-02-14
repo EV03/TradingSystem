@@ -4,6 +4,7 @@ using Domain.StoreSystem;
 using Domain.StoreSystem.models;
 using Domain.StoreSystem.ValueObjects;
 using Shared.Contracts.Dtos;
+using Shared.Contracts.Events;
 
 namespace Shared.Contracts.Mapping;
 
@@ -50,5 +51,11 @@ public class MappingProfile : Profile
         CreateMap<SupplierDeliveryTime, SupplierDeliveryTimeDto>()
             .ForMember(dest => dest.SupplierId, opt => opt.MapFrom(src => src.SupplierId))
             .ForMember(dest => dest.AverageDeliveryTime, opt => opt.MapFrom(src => src.AverageDeliveryTime));
+
+        CreateMap<StockItem, InventoryResponseProductsStock>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.CachedProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.AvailableQuantity))
+            .ForMember(dest => dest.minStock, opt => opt.MapFrom(src => src.MinStock));
+
     }
 }
