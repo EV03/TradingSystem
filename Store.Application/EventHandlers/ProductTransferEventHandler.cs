@@ -12,6 +12,7 @@ public class ProductTransferEventHandler : IEventHandler<ProductTransferEvent>
     public ProductTransferEventHandler(IStockItemRepository stockItemRepository)
     {
         _storeId = Environment.GetEnvironmentVariable("STORE_ID") ?? throw new Exception("STORE_ID is not set");
+        _stockItemRepository = stockItemRepository;
     }
     public async Task HandleAsync(ProductTransferEvent @event)
     {

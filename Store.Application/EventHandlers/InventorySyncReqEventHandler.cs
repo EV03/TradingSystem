@@ -13,17 +13,16 @@ public class InventorySyncReqEventHandler : IEventHandler<InventorySyncReqEvent>
     private readonly IStockService _stockService;
     private readonly IMapper _mapper;
     
-    public InventorySyncReqEventHandler(IEventBus eventBus, IStockService stockService)
+    public InventorySyncReqEventHandler(IEventBus eventBus, IStockService stockService, IMapper mapper)
     {
         _eventBus = eventBus;
         _storeId = Environment.GetEnvironmentVariable("STORE_ID") ?? throw new Exception("STORE_ID is not set");
         _enterpriseId = Environment.GetEnvironmentVariable("ENTERPRISE_ID") ?? throw new Exception("ENTERPRISE_ID is not set");
         _stockService = stockService;
-        
+        _mapper = mapper;
     }
     public async  Task HandleAsync(InventorySyncReqEvent @event)
     {
-        
         if(@event.ExcludedStoreIds.Contains(long.Parse(_storeId)))
         {
             return;  // store is excluded

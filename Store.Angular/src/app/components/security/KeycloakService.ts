@@ -39,7 +39,7 @@ export class KeycloakService {
     if (username === 'storemanager') {
       this.apiUri = 'https://localhost:7001/api';
     } else if (username === 'storemanager2') {
-      this.apiUri = '';
+      this.apiUri = 'https://localhost:7002/api';
     } else {
       this.apiUri = '';
     }

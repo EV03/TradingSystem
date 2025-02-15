@@ -18,4 +18,13 @@
       <ProjectReference Include="..\Store.Grpc\Store.Grpc.csproj" />
     </ItemGroup>
 
+    <!-- Define separate output paths based on the custom property 'StoreName' -->
+    <PropertyGroup Condition="'$(StoreName)'=='Store1'">
+        <OutputPath>bin\$(Configuration)\net8.0\Store1\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(StoreName)'=='Store2'">
+        <OutputPath>bin\$(Configuration)\net8.0\Store2\</OutputPath>
+    </PropertyGroup>
+
 </Project>
