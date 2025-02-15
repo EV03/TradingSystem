@@ -6,8 +6,8 @@ public class  InventorySyncResEvent : IStoreEvent
 {
     public long EnterpriseId { get; set; }
     public long ToStoreId { get; set; }
-    public List<long> ExcludedStoreIds { get; set; }
-    public  List<InventoryResponseProductsStock> ProductsStock{ get; set; }
+    public List<long> ExcludedStoreIds { get; set; } = new List<long>();
+    public  List<InventoryResponseProductsStock> ProductsStock{ get; set; } = new List<InventoryResponseProductsStock>();
 }
 public class InventoryResponseProductsStock
 { 

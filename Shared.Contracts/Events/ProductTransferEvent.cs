@@ -5,7 +5,7 @@ public class  ProductTransferEvent : IEnterpriseEvent
 {
     public long EnterpriseId { get; set; }
     public long ToStoreId { get; set; }
-    public  List<ProductTransferDetail> ProductTransferDetails { get; set; }
+    public  List<ProductTransferDetail> ProductTransferDetails { get; set; } = new List<ProductTransferDetail>();
 }
 
 public class ProductTransferDetail
