@@ -43,7 +43,7 @@ public class CashDeskSalesStateMachine
         _printerController = printerController;
         _barcodeScannerController = barcodeScannerController;
         _displayController = displayController;
-        _cardReaderController = cardReaderController;
+        _cardReaderController = cardReaderController;  
         _saleService = saleService;
         _paymentService = paymentService;
         _expressModeService = expressModeService;
@@ -195,6 +195,7 @@ public class CashDeskSalesStateMachine
         catch (Exception)
         {
             Console.WriteLine("Card payment got canceled, choose card or cash payment again");
+            _displayController.DisplayText("Card payment canceled, choose payment method again");
             _stateMachine.Fire(CashDeskAction.CancelPayment);
         }
     }
